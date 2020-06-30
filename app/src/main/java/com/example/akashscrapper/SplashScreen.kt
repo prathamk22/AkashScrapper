@@ -1,4 +1,4 @@
-package com.example.akashscrapper.activities
+package com.example.akashscrapper
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.os.CountDownTimer
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import androidx.appcompat.app.AppCompatActivity
-import com.example.akashscrapper.R
+import com.example.akashscrapper.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -16,9 +16,9 @@ class SplashScreen : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val anim: Animation = ScaleAnimation(
-            0f, 1f,  // Start and end values for the X axis scaling
-            0f, 1f,  // Start and end values for the Y axis scaling
-            Animation.RELATIVE_TO_SELF, 0f,  // Pivot point of X scaling
+            0f, 1f,
+            0f, 1f,
+            Animation.RELATIVE_TO_SELF, 0f,
             Animation.RELATIVE_TO_SELF, 1f
         )
         anim.fillAfter = true

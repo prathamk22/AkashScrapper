@@ -1,4 +1,4 @@
-package com.example.akashscrapper.activities
+package com.example.akashscrapper.login
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
