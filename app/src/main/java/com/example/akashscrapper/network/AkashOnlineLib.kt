@@ -11,8 +11,6 @@ object AkashOnlineLib {
 
     val api get() = getClient().api
 
-    val onlineV2JsonApi get() = getClient().onlineV2JsonApi
-
     var httpLogging
         get() = getClient().getHttpLogging()
         set(value) = getClient().setHttpLogging(value)

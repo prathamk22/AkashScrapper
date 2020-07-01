@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class AkashAPI internal constructor(
-    communicator: APICommunicator
+    private val communicator: APICommunicator
 ) {
     companion object {
         private const val PROD = "akash-api.herokuapp.com/"
@@ -50,13 +50,6 @@ class AkashAPI internal constructor(
         }
         .build()
 
-    private val onlineV2JsonRetrofit = Retrofit.Builder()
-        .client(clientInterceptor)
-        .baseUrl("http://$PROD/")
-        .build()
-    val onlineV2JsonApi: AkashAPI
-        get() = onlineV2JsonRetrofit.create(AkashAPI::class.java)
-
     var gson: Gson = GsonBuilder()
         .setLenient()
         .create()
@@ -66,7 +59,7 @@ class AkashAPI internal constructor(
         .baseUrl("http://$PROD/api/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
-    val api: AkashAPI = retrofit.create(AkashAPI::class.java)
-
-
+    val api: AkashAPICalls = retrofit.create(
+        AkashAPICalls::class.java
+    )
 }
