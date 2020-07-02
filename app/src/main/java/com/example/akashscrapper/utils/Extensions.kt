@@ -1,15 +1,16 @@
 package com.example.akashscrapper.utils
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.AnimRes
 import androidx.annotation.AnimatorRes
 import androidx.annotation.IdRes
+import androidx.annotation.Keep
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.akashscrapper.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -115,4 +116,24 @@ fun View.showSnackbar(
     snackBarView.show()
     return snackBarView
 }
+
+@Keep
+fun <F : Fragment> F.getPrefs(): PreferenceHelper? {
+    return context?.let { PreferenceHelper.getPrefs(it) }
+}
+
+@Keep
+fun <A : Context> A.getPrefs(): PreferenceHelper {
+    return PreferenceHelper.getPrefs(this)
+}
+
+
+fun <T> LiveData<T>.observer(owner: LifecycleOwner, onEmission: (T) -> Unit) {
+    return observe(owner, Observer<T> {
+        if (it != null) {
+            onEmission(it)
+        }
+    })
+}
+
 

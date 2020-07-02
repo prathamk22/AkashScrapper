@@ -13,7 +13,7 @@ class AkashAPI internal constructor(
     private val communicator: APICommunicator
 ) {
     companion object {
-        private const val PROD = "akash-api.herokuapp.com/"
+        private const val PROD = "akash-api2.herokuapp.com"
         const val CONNECT_TIMEOUT = 15
         const val READ_TIMEOUT = 15
     }
@@ -56,7 +56,7 @@ class AkashAPI internal constructor(
 
     private val retrofit = Retrofit.Builder()
         .client(clientInterceptor)
-        .baseUrl("http://$PROD/api/")
+        .baseUrl("http://$PROD/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
     val api: AkashAPICalls = retrofit.create(

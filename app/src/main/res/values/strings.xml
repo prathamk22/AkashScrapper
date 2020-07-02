@@ -10,4 +10,7 @@
     <string name="get_started">Get Started</string>
     <string name="login">Login</string>
     <string name="signup">SignUp</string>
+    <string name="sign_up_to_continue">sign up to continue</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm Password</string>
 </resources>

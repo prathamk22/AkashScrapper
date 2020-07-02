@@ -5,10 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingStart="@dimen/large"
-    android:paddingTop="@dimen/large"
-    android:paddingEnd="0dp"
-    tools:context=".SplashHolder.LoginSignup.LoginFragment">
+    android:padding="30dp"
+    tools:context=".SplashHolder.LoginSignup.SignupFragment">
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,14 +20,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_medium"
-        android:text="@string/sign_in_to_continue"
+        android:text="@string/sign_up_to_continue"
         android:textColor="@color/grey"
         android:textSize="24sp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="65dp"
+        app:errorEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/fullName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white"
+            android:hint="@string/name"
+            android:inputType="textEmailAddress"
+            android:paddingStart="0dp"
+            android:textColorHighlight="@color/colorPrimaryDark"
+            android:textColorHint="@color/grey"
+            android:textSize="16sp"
+            tools:ignore="RtlSymmetry" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -68,16 +86,29 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:gravity="end"
-        android:paddingEnd="20dp"
-        android:text="@string/forgot_password" />
+        app:boxStrokeColor="@color/grey"
+        app:errorEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/confirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:paddingStart="0dp"
+            android:textColorHighlight="@color/colorPrimaryDark"
+            android:textColorHint="@color/grey"
+            android:textSize="16sp"
+            tools:ignore="RtlSymmetry" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/getStarted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -86,7 +117,7 @@
         android:fontFamily="@font/poppins_semibold"
         android:paddingStart="30dp"
         android:paddingEnd="30dp"
-        android:text="@string/login"
+        android:text="@string/get_started"
         android:textColor="@color/black" />
 
 </LinearLayout>

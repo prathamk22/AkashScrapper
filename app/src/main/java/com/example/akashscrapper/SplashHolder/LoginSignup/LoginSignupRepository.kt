@@ -6,4 +6,7 @@ import com.example.akashscrapper.network.safeApiCall
 class LoginSignupRepository {
     suspend fun login(email: String, password: String) =
         safeApiCall { AkashOnlineLib.api.login(email, password) }
+
+    suspend fun signUp(email: String, password: String) =
+        safeApiCall { AkashOnlineLib.api.signUp(email, password) }
 }

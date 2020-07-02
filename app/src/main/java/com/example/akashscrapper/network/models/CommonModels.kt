@@ -5,8 +5,5 @@ open class BaseModel {
 }
 
 data class Login(
-    val token: String,
-    val name: String,
-    val collegeCourse: String,
-    val branch: String
+    val token: String
 ) : BaseModel()

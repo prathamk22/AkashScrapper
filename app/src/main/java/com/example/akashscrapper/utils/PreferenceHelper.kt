@@ -9,6 +9,7 @@ class PreferenceHelper private constructor() {
         private const val PREFS_FILENAME = "com.example.akashscrapper.prefs"
         const val JWT_TOKEN = "jwt_token"
         const val REFRESH_TOKEN = "refresh_token"
+        const val NAME = "name"
 
         private var prefs: SharedPreferences? = null
         private var instance: PreferenceHelper = PreferenceHelper()
@@ -25,6 +26,12 @@ class PreferenceHelper private constructor() {
         get() = prefs?.getString(JWT_TOKEN, "") ?: ""
         set(value) {
             prefs?.save(JWT_TOKEN, value)
+        }
+
+    var NAME: String
+        get() = prefs?.getString(NAME, "") ?: ""
+        set(value) {
+            prefs?.save(NAME, value)
         }
 
 

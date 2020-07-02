@@ -13,4 +13,10 @@ interface AkashAPICalls {
         @Query("password") password: String
     ): Response<Login>
 
+    @POST("signup")
+    suspend fun signUp(
+        @Query("email") email: String,
+        @Query("password") password: String
+    ): Response<Login>
+
 }

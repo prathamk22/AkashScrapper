@@ -10,7 +10,7 @@ class LoginSignupViewModel(
     private val repo: LoginSignupRepository
 ) : BaseViewModel() {
 
-    val login: MutableLiveData<Boolean> = MutableLiveData()
+    val token: MutableLiveData<String> = MutableLiveData()
 
     fun login(email: String, password: String) {
         runIO {
@@ -20,7 +20,24 @@ class LoginSignupViewModel(
                 }
                 is ResultWrapper.Success -> {
                     if (response.value.isSuccessful) {
-                        login.postValue(true)
+                        token.postValue(response.value.message())
+                    } else {
+                        setError(fetchError(response.value.code()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun signUp(email: String, password: String, fullName: String) {
+        runIO {
+            when (val response = repo.signUp(email, password)) {
+                is ResultWrapper.GenericError -> {
+                    setError(response.error)
+                }
+                is ResultWrapper.Success -> {
+                    if (response.value.isSuccessful) {
+                        token.postValue(response.value.message())
                     } else {
                         setError(fetchError(response.value.code()))
                     }
