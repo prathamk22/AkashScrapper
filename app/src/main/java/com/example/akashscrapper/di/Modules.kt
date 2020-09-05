@@ -2,8 +2,8 @@ package com.example.akashscrapper.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.akashscrapper.SplashHolder.LoginSignup.LoginSignupRepository
-import com.example.akashscrapper.SplashHolder.LoginSignup.LoginSignupViewModel
+import com.example.akashscrapper.dashboard.DashboardRepository
+import com.example.akashscrapper.dashboard.DashboardViewModel
 import com.example.akashscrapper.database.AppDatabase
 import com.example.akashscrapper.utils.PreferenceHelper
 import org.koin.android.ext.koin.androidApplication
@@ -11,9 +11,9 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { LoginSignupViewModel(get()) }
+    viewModel { DashboardViewModel(get()) }
 
-    single { LoginSignupRepository() }
+    single { DashboardRepository() }
 }
 
 val preferencesModule = module {

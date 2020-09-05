@@ -13,7 +13,9 @@ class AkashAPI internal constructor(
     private val communicator: APICommunicator
 ) {
     companion object {
-        private const val PROD = "akash-api2.herokuapp.com"
+        private const val PROD = "api.noteshub.co.in/public"
+        private const val APP_ID =
+            "540a0a29f96e4d9262467450815ef24a087f96ca019a39cc689eb86314949a15"
         const val CONNECT_TIMEOUT = 15
         const val READ_TIMEOUT = 15
     }
@@ -41,11 +43,16 @@ class AkashAPI internal constructor(
         .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
         .addInterceptor(logging)
         .addInterceptor { chain ->
-            if (communicator.authJwt.isEmpty())
-                chain.proceed(chain.request())
-            else chain.proceed(
+            chain.proceed(
                 chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer ${communicator.authJwt}").build()
+                    .addHeader(
+                        "x-requested-with",
+                        if (communicator.authJwt.isEmpty()) {
+                            APP_ID
+                        } else {
+                            communicator.authJwt
+                        }
+                    ).build()
             )
         }
         .build()

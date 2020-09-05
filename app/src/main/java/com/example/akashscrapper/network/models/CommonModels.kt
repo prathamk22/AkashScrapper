@@ -1,9 +1,8 @@
 package com.example.akashscrapper.network.models
 
-open class BaseModel {
-    val message: String = ""
-}
+import com.google.gson.annotations.SerializedName
 
-data class Login(
-    val token: String
-) : BaseModel()
+data class AccessToken(
+    @SerializedName("access_token")
+    val accessToken: String
+)

@@ -1,22 +1,12 @@
 package com.example.akashscrapper.network
 
-import com.example.akashscrapper.network.models.Login
+import com.example.akashscrapper.network.models.AccessToken
 import retrofit2.Response
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.GET
 
 interface AkashAPICalls {
 
-    @POST("login")
-    suspend fun login(
-        @Query("email") email: String,
-        @Query("password") password: String
-    ): Response<Login>
-
-    @POST("signup")
-    suspend fun signUp(
-        @Query("email") email: String,
-        @Query("password") password: String
-    ): Response<Login>
+    @GET("token")
+    suspend fun getToken(): Response<AccessToken>
 
 }
