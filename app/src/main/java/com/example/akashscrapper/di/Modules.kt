@@ -13,7 +13,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { DashboardViewModel(get()) }
 
-    single { DashboardRepository() }
+    single { DashboardRepository(get(), get()) }
 }
 
 val preferencesModule = module {
@@ -34,8 +34,13 @@ val databaseModule = module {
     }
 
     factory {
-//        val database: AppDatabase = get()
-//        database.notesDao()
+        val database: AppDatabase = get()
+        database.getSemesterDao()
+    }
+
+    factory {
+        val database: AppDatabase = get()
+        database.subjectDao()
     }
 }
 

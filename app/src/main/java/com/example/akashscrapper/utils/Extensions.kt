@@ -4,11 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.AnimRes
-import androidx.annotation.AnimatorRes
-import androidx.annotation.IdRes
-import androidx.annotation.Keep
+import androidx.annotation.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import com.example.akashscrapper.R
@@ -29,6 +27,27 @@ fun SharedPreferences.save(key: String, value: Any) {
         }
     }
 }
+
+fun AppCompatActivity.setToolbar(
+    toolbar: Toolbar,
+    hasUpEnabled: Boolean = true,
+    homeButtonEnabled: Boolean = true,
+    title: String = "",
+    show: Boolean = true,
+    @DrawableRes indicator: Int = 0
+) {
+    setSupportActionBar(toolbar)
+    if (show) {
+        if (title.isNotEmpty())
+            supportActionBar?.title = title
+        if (indicator != 0)
+            supportActionBar?.setHomeAsUpIndicator(indicator)
+        supportActionBar?.setDisplayHomeAsUpEnabled(hasUpEnabled)
+        supportActionBar?.setHomeButtonEnabled(homeButtonEnabled)
+        supportActionBar?.show()
+    } else supportActionBar?.hide()
+}
+
 
 fun AppCompatActivity.replaceFragmentSafely(
     fragment: Fragment,

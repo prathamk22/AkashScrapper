@@ -7,6 +7,7 @@ import com.example.akashscrapper.di.viewModelModule
 import com.example.akashscrapper.network.APICommunicator
 import com.example.akashscrapper.network.AkashOnlineLib
 import com.example.akashscrapper.utils.PreferenceHelper
+import com.facebook.stetho.Stetho
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -38,6 +39,7 @@ class AkashApp : Application() {
 
         if (BuildConfig.DEBUG) {
             AkashOnlineLib.httpLogging = true
+            Stetho.initializeWithDefaults(this);
         }
 
         startKoin {

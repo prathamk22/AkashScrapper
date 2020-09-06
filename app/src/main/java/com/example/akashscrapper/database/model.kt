@@ -4,8 +4,19 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Login(
+data class Semester(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    val semester: Int,
+    val branch: Int,
+    val branchName: String
+)
+
+@Entity
+data class Subject(
     @PrimaryKey
     val id: Int,
-    val token: String
+    val semesterId: Int,
+    val subjectName: String,
+    val subjectAbbrivation: String
 )

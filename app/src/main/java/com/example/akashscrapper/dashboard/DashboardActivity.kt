@@ -9,6 +9,7 @@ import com.example.akashscrapper.dashboard.userPanel.UserPanel
 import com.example.akashscrapper.network.APICommunicator
 import com.example.akashscrapper.network.AkashOnlineLib
 import com.example.akashscrapper.utils.getPrefs
+import com.example.akashscrapper.utils.observer
 import com.example.akashscrapper.utils.replaceFragmentSafely
 import com.example.akashscrapper.utils.showSnackbar
 import kotlinx.android.synthetic.main.activity_dashboard.*
@@ -22,7 +23,7 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
 
         if (getPrefs().SP_JWT_TOKEN_KEY.isNullOrEmpty()) {
-            vm.getToken().observe(this) {
+            vm.getToken().observer(this) {
                 getPrefs().SP_JWT_TOKEN_KEY = it ?: ""
                 AkashOnlineLib.initialize(object : APICommunicator {
                     override var authJwt: String
