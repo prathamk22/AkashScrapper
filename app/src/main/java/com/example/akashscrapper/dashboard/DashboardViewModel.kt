@@ -1,8 +1,16 @@
 package com.example.akashscrapper.dashboard
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import com.example.akashscrapper.dashboard.filesPanel.FilesDataSource
+import com.example.akashscrapper.database.Subject
 import com.example.akashscrapper.network.ResultWrapper
+import com.example.akashscrapper.network.models.Data
 import com.example.akashscrapper.utils.BaseViewModel
 import com.example.akashscrapper.utils.runIO
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +31,13 @@ class DashboardViewModel(
             }
         }
     }
+
+    //Class Panel
+    val subjectItem = MutableLiveData<Subject>()
+
+    fun getAllSemester() = repo.getAllSemesters()
+
+    fun getSubjectsById(id: Int) = repo.getSubjectsById(id)
 
     //Add Bottom Sheet ViewModel
     var branch: Int = -1
@@ -53,5 +68,26 @@ class DashboardViewModel(
         }
     }
 
-    fun getAllSemester() = repo.getAllSemesters()
+    //Files Panel
+
+    lateinit var filesLiveData: LiveData<PagedList<Data>>
+
+    fun getFilesBySubject(key: String) {
+        val config = PagedList.Config.Builder()
+            .setPageSize(10)
+            .setEnablePlaceholders(true)
+            .build()
+        filesLiveData = initializedPagedListBuilder(config, key).build()
+    }
+
+    private fun initializedPagedListBuilder(config: PagedList.Config, key: String):
+            LivePagedListBuilder<String, Data> {
+
+        val dataSourceFactory = object : DataSource.Factory<String, Data>() {
+            override fun create(): DataSource<String, Data> {
+                return FilesDataSource(viewModelScope, key)
+            }
+        }
+        return LivePagedListBuilder(dataSourceFactory, config)
+    }
 }

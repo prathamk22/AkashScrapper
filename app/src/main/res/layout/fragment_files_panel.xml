@@ -7,5 +7,9 @@
     app:cardCornerRadius="@dimen/small_margin"
     tools:context=".dashboard.filesPanel.FilesPanel">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/filesRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </com.google.android.material.card.MaterialCardView>

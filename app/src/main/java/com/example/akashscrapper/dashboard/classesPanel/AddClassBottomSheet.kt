@@ -51,7 +51,7 @@ class AddClassBottomSheet : BottomSheetDialogFragment() {
             genericBottomSheet = GenericBottomSheet(object : GenericOnClickListener {
                 override fun onClick(position: Int, value: String) {
                     branchTv.text = value
-                    vm.branch = position
+                    vm.branch = position + 1
                     vm.branchName = value
                 }
             })
@@ -61,18 +61,18 @@ class AddClassBottomSheet : BottomSheetDialogFragment() {
         }
 
         insertCourse.setOnClickListener {
-            if (vm.branch == -1) {
-                Toast.makeText(
-                    requireContext(),
-                    "Select a branch to add classroom",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return@setOnClickListener
-            }
             if (vm.semester == -1) {
                 Toast.makeText(
                     requireContext(),
                     "Select a semester to add classroom",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+            if (vm.branch == -1) {
+                Toast.makeText(
+                    requireContext(),
+                    "Select a branch to add classroom",
                     Toast.LENGTH_SHORT
                 ).show()
                 return@setOnClickListener

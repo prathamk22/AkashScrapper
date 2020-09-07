@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.akashscrapper.R
 import com.example.akashscrapper.dashboard.DashboardViewModel
+import com.example.akashscrapper.database.Subject
 import com.example.akashscrapper.utils.observer
 import kotlinx.android.synthetic.main.fragment_class_panel.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -16,6 +17,22 @@ class ClassPanel : Fragment() {
 
     val vm: DashboardViewModel by sharedViewModel()
     val classAdapter = ClassesAdapter()
+    val subjectsAdapter = SubjectsAdapter()
+
+    val clickListener = object : ClassesClickListener {
+        override fun onClick(id: Int) {
+            vm.getSubjectsById(id).observer(viewLifecycleOwner) {
+                subjectsAdapter.submitList(it)
+            }
+        }
+    }
+
+    val subjectClickListener = object : SubjectClickListener {
+        override fun onSubjectClicked(subject: Subject) {
+            vm.subjectItem.postValue(subject)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,11 +47,13 @@ class ClassPanel : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = classAdapter
         }
+        classAdapter.clickListener = clickListener
 
         subjectsRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = classAdapter
+            adapter = subjectsAdapter
         }
+        subjectsAdapter.subjectClickListener = subjectClickListener
 
         addFab.setOnClickListener {
             val addClassBottomSheet = AddClassBottomSheet()
@@ -42,7 +61,10 @@ class ClassPanel : Fragment() {
         }
 
         vm.getAllSemester().observer(viewLifecycleOwner) {
-            classAdapter.submitList(it)
+            if (it.isNotEmpty()) {
+                clickListener.onClick(it[0].id)
+                classAdapter.submitList(it)
+            }
         }
     }
 }

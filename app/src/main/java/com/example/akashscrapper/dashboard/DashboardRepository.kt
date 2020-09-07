@@ -30,4 +30,6 @@ class DashboardRepository(
     }
 
     fun getAllSemesters() = semesterDao.getAllSemesters()
+
+    fun getSubjectsById(id: Int) = subjectDao.getAllSubjectsByClassId(id)
 }

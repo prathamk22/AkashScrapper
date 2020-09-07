@@ -2,7 +2,6 @@ package com.example.akashscrapper.dashboard.classesPanel
 
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,31 +12,31 @@ import kotlinx.android.synthetic.main.classes_item.view.*
 
 class ClassesAdapter : ListAdapter<Semester, ClassesAdapter.ClassesViewHolder>(SemesterDC()) {
 
+    var clickListener: ClassesClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ClassesViewHolder(
         LayoutInflater.from(parent.context)
             .inflate(R.layout.classes_item, parent, false)
     )
 
-    override fun onBindViewHolder(holder: ClassesViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: ClassesViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.clickListener = clickListener
+    }
 
     inner class ClassesViewHolder(
         itemView: View
-    ) : RecyclerView.ViewHolder(itemView), OnClickListener {
+    ) : RecyclerView.ViewHolder(itemView) {
 
-        override fun onClick(v: View?) {
-
-            if (adapterPosition == RecyclerView.NO_POSITION) return
-
-            val clicked = getItem(adapterPosition)
-        }
-
+        var clickListener: ClassesClickListener? = null
         fun bind(item: Semester) = with(itemView) {
             var initals = ""
             for (text in item.branchName.split(" "))
                 if (text.isNotEmpty())
                     initals += text[0]
             classInitials.text = initals
+            setOnClickListener {
+                clickListener?.onClick(item.id)
+            }
         }
     }
 
@@ -56,4 +55,8 @@ class ClassesAdapter : ListAdapter<Semester, ClassesAdapter.ClassesViewHolder>(S
             return oldItem == newItem
         }
     }
+}
+
+interface ClassesClickListener {
+    fun onClick(id: Int)
 }
