@@ -62,8 +62,6 @@ class FilesDataSource(
                                     files?.documents?.current_page?.plus(1).toString()
                                 )
                             }
-                        } else {
-
                         }
                     }
                 }

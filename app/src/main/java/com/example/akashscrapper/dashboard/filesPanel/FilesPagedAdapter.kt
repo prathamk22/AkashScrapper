@@ -21,6 +21,8 @@ class FilesPagedAdapter :
         }
 
     }) {
+
+    var onClick: FileClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilesViewHolder {
         return FilesViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.files_item, parent, false)
@@ -29,15 +31,29 @@ class FilesPagedAdapter :
 
     override fun onBindViewHolder(holder: FilesViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.onClick = onClick
     }
 }
 
 class FilesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+    var onClick: FileClickListener? = null
     fun bind(item: Data?) {
         with(itemView) {
             fileName.text = item?.document_title
+
+            setOnClickListener {
+                item?.document_absolute_path?.let { url ->
+                    onClick?.onFileClicked(
+                        url,
+                        item.document_title
+                    )
+                }
+            }
         }
     }
+}
 
+interface FileClickListener {
+    fun onFileClicked(url: String, name: String)
 }

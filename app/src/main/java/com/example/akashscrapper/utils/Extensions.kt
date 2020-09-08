@@ -1,20 +1,30 @@
 package com.example.akashscrapper.utils
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Environment
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
+import androidx.security.crypto.EncryptedFile
+import androidx.security.crypto.MasterKeys
 import com.example.akashscrapper.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 
 fun SharedPreferences.save(key: String, value: Any) {
     with(this.edit()) {
@@ -155,4 +165,71 @@ fun <T> LiveData<T>.observer(owner: LifecycleOwner, onEmission: (T) -> Unit) {
     })
 }
 
+fun Context.checkPermission(): Boolean {
 
+    val readExternal = ContextCompat.checkSelfPermission(
+        this.applicationContext,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
+    val writeExternal = ContextCompat.checkSelfPermission(
+        this.applicationContext,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
+
+    return readExternal == PackageManager.PERMISSION_GRANTED && writeExternal == PackageManager.PERMISSION_GRANTED
+}
+
+fun Context.isStoragePermissionGranted(): Boolean {
+    return if (Build.VERSION.SDK_INT >= 23) {
+        if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            true
+        } else {
+
+            ActivityCompat.requestPermissions(
+                this as Activity,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                1
+            )
+            false
+        }
+    } else { // permission is automatically granted on sdk<23 upon installation
+        true
+    }
+}
+
+fun Context.getKeyAlias(): String {
+    return MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+}
+
+fun File.encryptFile(context: Context) {
+    try {
+        val encryptedFile = context.getEncryptedFile("${this.name}_encrypted")
+        encryptedFile.openFileOutput().use { output ->
+            output.write(this.readBytes())
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
+private fun Context.getEncryptedFile(name: String): EncryptedFile {
+    return EncryptedFile.Builder(
+        File("${this.getExternalFilesDir(Environment.getDataDirectory().absolutePath)}/${Environment.DIRECTORY_DOCUMENTS}/$name"),
+        this,
+        this.getKeyAlias(),
+        EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
+    ).build()
+}
+
+fun Context.decryptFile(title: String): String {
+    val encryptedFile = getEncryptedFile("${title}_encrypted")
+
+    try {
+        encryptedFile.openFileInput().use { input ->
+            return String(input.readBytes(), Charsets.UTF_8)
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return ""
+    }
+}

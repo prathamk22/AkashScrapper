@@ -69,7 +69,6 @@ class DashboardViewModel(
     }
 
     //Files Panel
-
     lateinit var filesLiveData: LiveData<PagedList<Data>>
 
     fun getFilesBySubject(key: String) {
