@@ -1,0 +1,11 @@
+package com.example.akashscrapper.pdfActivity
+
+import com.example.akashscrapper.database.FileDownloadsDao
+
+class PdfRepository(
+    private val filesDao: FileDownloadsDao
+) {
+
+    fun getFileById(id: Int) = filesDao.getFile(id)
+
+}

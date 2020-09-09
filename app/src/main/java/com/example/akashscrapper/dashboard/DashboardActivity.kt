@@ -6,8 +6,6 @@ import com.example.akashscrapper.R
 import com.example.akashscrapper.dashboard.classesPanel.ClassPanel
 import com.example.akashscrapper.dashboard.filesPanel.FilesPanel
 import com.example.akashscrapper.dashboard.userPanel.UserPanel
-import com.example.akashscrapper.network.APICommunicator
-import com.example.akashscrapper.network.AkashOnlineLib
 import com.example.akashscrapper.utils.getPrefs
 import com.example.akashscrapper.utils.observer
 import com.example.akashscrapper.utils.replaceFragmentSafely
@@ -25,19 +23,6 @@ class DashboardActivity : AppCompatActivity() {
         if (getPrefs().SP_JWT_TOKEN_KEY.isNullOrEmpty()) {
             vm.getToken().observer(this) {
                 getPrefs().SP_JWT_TOKEN_KEY = it ?: ""
-                AkashOnlineLib.initialize(object : APICommunicator {
-                    override var authJwt: String
-                        get() = getPrefs().SP_JWT_TOKEN_KEY
-                        set(value) {
-                            getPrefs().SP_JWT_TOKEN_KEY = value
-                        }
-                    override var refreshToken: String
-                        get() = getPrefs().SP_JWT_REFRESH_TOKEN
-                        set(value) {
-                            getPrefs().SP_JWT_REFRESH_TOKEN = value
-                        }
-
-                })
             }
         }
 

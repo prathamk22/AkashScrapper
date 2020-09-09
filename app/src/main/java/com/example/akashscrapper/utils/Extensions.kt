@@ -201,9 +201,9 @@ fun Context.getKeyAlias(): String {
     return MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 }
 
-fun File.encryptFile(context: Context) {
+fun File.encryptFile(context: Context, name: String) {
     try {
-        val encryptedFile = context.getEncryptedFile("${this.name}_encrypted")
+        val encryptedFile = context.getEncryptedFile(name)
         encryptedFile.openFileOutput().use { output ->
             output.write(this.readBytes())
         }
@@ -211,6 +211,9 @@ fun File.encryptFile(context: Context) {
         e.printStackTrace()
     }
 }
+
+fun Context.getDirectoryName() =
+    "${this.getExternalFilesDir(Environment.getDataDirectory().absolutePath)}/${Environment.DIRECTORY_DOCUMENTS}"
 
 private fun Context.getEncryptedFile(name: String): EncryptedFile {
     return EncryptedFile.Builder(

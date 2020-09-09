@@ -46,7 +46,8 @@ class FilesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 item?.document_absolute_path?.let { url ->
                     onClick?.onFileClicked(
                         url,
-                        item.document_title
+                        item.document_title,
+                        item.document_id
                     )
                 }
             }
@@ -55,5 +56,5 @@ class FilesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 }
 
 interface FileClickListener {
-    fun onFileClicked(url: String, name: String)
+    fun onFileClicked(url: String, name: String, fileId: Int)
 }
