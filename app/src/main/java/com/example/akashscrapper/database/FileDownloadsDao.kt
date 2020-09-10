@@ -13,4 +13,7 @@ interface FileDownloadsDao : BaseDao<FileDownloadModel> {
     @Query("UPDATE FileDownloadModel SET isDownloaded = :downloaded WHERE fileId = :id")
     suspend fun fileDownloaded(downloaded: Boolean, id: Int)
 
+    @Query("DELETE FROM FileDownloadModel WHERE fileId = :id")
+    fun deleteFile(id: Int)
+
 }

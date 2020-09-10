@@ -37,9 +37,8 @@ class DownloadPdfService : Service() {
             ContextCompat.startForegroundService(context, intent)
         }
 
-
+        const val NOTIFICATION_ID = 101
         const val ACTION_STOP = "ACTION_STOP_FOREGROUND_SERVICE"
-        const val NOTIFICATION_ID = 10
         var notificationId = 1
     }
 
@@ -55,71 +54,91 @@ class DownloadPdfService : Service() {
         applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val fileName = intent?.getStringExtra(FILE_NAME)
-        val fileNameWithExt = "$fileName.pdf"
-        val url = intent?.getStringExtra(FILE_URL)
-        val id = intent?.getIntExtra(FILE_ID, 0) ?: 0
-        val encryptedName = "${fileName}_encrypted.dat"
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        if (intent.action == ACTION_STOP) {
+            stopServiceManually()
+            notificationManager.cancel(NOTIFICATION_ID)
+        } else {
+            val fileName = intent.getStringExtra(FILE_NAME)
+            val fileNameWithExt = "$fileName.pdf"
+            val url = intent.getStringExtra(FILE_URL)
+            val id = intent.getIntExtra(FILE_ID, 0) ?: 0
+            val encryptedName = "${fileName}_encrypted.dat"
+            Log.e("TAG", "onStartCommand: Download Started")
 
-        if (fileName?.isNotEmpty() == true && url?.isNotEmpty() == true) {
-            val notification =
-                NotificationCompat.Builder(applicationContext, DOWNLOAD_CHANNEL_ID).apply {
-                    setSmallIcon(R.drawable.ic_baseline_arrow_downward_24)
-                    setContentTitle(fileName)
-                    setOnlyAlertOnce(true)
-                    setContentText("Downloading file")
-                    setOngoing(true)
+            if (fileName?.isNotEmpty() == true && url?.isNotEmpty() == true) {
+                startForeground()
+                GlobalScope.launch(Dispatchers.IO) {
+                    fileDownloadDao.insert(
+                        FileDownloadModel(
+                            id,
+                            url,
+                            fileNameWithExt,
+                            false,
+                            encryptedName
+                        )
+                    )
                 }
-            startForeground()
-            GlobalScope.launch(Dispatchers.IO) {
-                fileDownloadDao.insert(
-                    FileDownloadModel(
-                        id,
-                        url,
-                        fileName,
-                        false,
-                        encryptedName
-                    )
-                )
-            }
 
-            intentFilter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-            val downloadManager =
-                applicationContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                intentFilter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+                val downloadManager =
+                    applicationContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
-            receiver = object : BroadcastReceiver() {
-                override fun onReceive(context: Context, intent: Intent) {
-                    val file =
-                        File("${applicationContext.getDirectoryName()}/$fileNameWithExt")
+                receiver = object : BroadcastReceiver() {
+                    override fun onReceive(context: Context, intent: Intent) {
+                        val file =
+                            File("${applicationContext.getDirectoryName()}/$fileNameWithExt")
 
-                    Log.e("TAG", "onReceive: ${intent.action}")
-                    downloadManager.addCompletedDownload(
-                        fileName,
-                        " ",
-                        false,
-                        "application/pdf",
-                        applicationContext.getDirectoryName(),
-                        file.length(),
-                        true
-                    )
-                    if (intent.action == DOWNLOAD_COMPLETE) {
+                        downloadManager.addCompletedDownload(
+                            fileName,
+                            " ",
+                            false,
+                            "application/pdf",
+                            applicationContext.getDirectoryName(),
+                            file.length(),
+                            true
+                        )
 
-                    } else {
+                        if (file.exists()) {
+                            if (file.encryptFile(applicationContext, encryptedName)) {
+                                file.delete()
+                            }
+                            GlobalScope.launch(Dispatchers.IO) {
+                                fileDownloadDao.fileDownloaded(true, id)
+                            }
+                            Toast.makeText(
+                                applicationContext,
+                                "$fileName download Completed",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            GlobalScope.launch(Dispatchers.IO) {
+                                fileDownloadDao.delete(
+                                    FileDownloadModel(
+                                        id,
+                                        url,
+                                        fileNameWithExt,
+                                        false,
+                                        encryptedName
+                                    )
+                                )
+                            }
+                        }
 
+                        stopServiceManually()
                     }
                 }
-            }
 
-            startDownload(url, fileNameWithExt)
-            applicationContext.registerReceiver(receiver, intentFilter)
-        } else {
-            Toast.makeText(
-                applicationContext,
-                "File is not appropriate to download. ",
-                Toast.LENGTH_SHORT
-            ).show()
-            stopSelf()
+                startDownload(url, fileNameWithExt)
+                applicationContext.registerReceiver(receiver, intentFilter)
+            } else {
+                Toast.makeText(
+                    applicationContext,
+                    "File is not appropriate to download. ",
+                    Toast.LENGTH_SHORT
+                ).show()
+                stopSelf()
+            }
         }
         return START_NOT_STICKY
     }
@@ -137,6 +156,8 @@ class DownloadPdfService : Service() {
             val manager =
                 applicationContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             manager.enqueue(request)
+
+            Toast.makeText(applicationContext, "Downloading $fileName", Toast.LENGTH_SHORT).show()
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
             Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_SHORT).show()
@@ -148,17 +169,26 @@ class DownloadPdfService : Service() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 createNotificationChannel("my_service", "My Background Service")
             } else {
-                // If earlier version channel ID is not used
-                // https://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html#NotificationCompat.Builder(android.content.Context)
                 ""
             }
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
+
+        val stopSelf = Intent(this, DownloadPdfService::class.java)
+        stopSelf.action = ACTION_STOP
+        val pStopSelf = PendingIntent.getService(
+            this,
+            0,
+            stopSelf, /*Stop Service*/
+            PendingIntent.FLAG_CANCEL_CURRENT
+        )
         val notification = notificationBuilder.setOngoing(true)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setPriority(NotificationCompat.PRIORITY_MIN)
             .setCategory(Notification.CATEGORY_SERVICE)
+            .addAction(R.drawable.ic_outline_close_24, "Cancel", pStopSelf)
             .build()
+
         startForeground(101, notification)
     }
 
@@ -175,7 +205,6 @@ class DownloadPdfService : Service() {
         return channelId
     }
 
-
     private fun stopServiceManually() {
         stopForeground(true)
         stopSelf()
@@ -185,4 +214,5 @@ class DownloadPdfService : Service() {
         applicationContext.unregisterReceiver(receiver)
         super.onDestroy()
     }
+
 }

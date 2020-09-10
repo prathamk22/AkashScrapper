@@ -19,12 +19,14 @@ import androidx.lifecycle.*
 import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKeys
 import com.example.akashscrapper.R
+import com.google.android.gms.common.util.IOUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.FileOutputStream
 
 fun SharedPreferences.save(key: String, value: Any) {
     with(this.edit()) {
@@ -201,14 +203,16 @@ fun Context.getKeyAlias(): String {
     return MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 }
 
-fun File.encryptFile(context: Context, name: String) {
-    try {
+fun File.encryptFile(context: Context, name: String): Boolean {
+    return try {
         val encryptedFile = context.getEncryptedFile(name)
         encryptedFile.openFileOutput().use { output ->
             output.write(this.readBytes())
         }
+        true
     } catch (e: Exception) {
         e.printStackTrace()
+        false
     }
 }
 
@@ -217,22 +221,28 @@ fun Context.getDirectoryName() =
 
 private fun Context.getEncryptedFile(name: String): EncryptedFile {
     return EncryptedFile.Builder(
-        File("${this.getExternalFilesDir(Environment.getDataDirectory().absolutePath)}/${Environment.DIRECTORY_DOCUMENTS}/$name"),
+        File("${getDirectoryName()}/$name"),
         this,
         this.getKeyAlias(),
         EncryptedFile.FileEncryptionScheme.AES256_GCM_HKDF_4KB
     ).build()
 }
 
-fun Context.decryptFile(title: String): String {
-    val encryptedFile = getEncryptedFile("${title}_encrypted")
+fun File.decryptFile(context: Context, title: String): File? {
+    val encryptedFile = context.getEncryptedFile(title)
 
     try {
         encryptedFile.openFileInput().use { input ->
-            return String(input.readBytes(), Charsets.UTF_8)
+            val tempFile = File("${context.getDirectoryName()}/${this.name}.pdf")
+            if (!tempFile.exists())
+                tempFile.createNewFile()
+            tempFile.deleteOnExit()
+            val out = FileOutputStream(tempFile)
+            val long = IOUtils.copyStream(input, out)
+            return tempFile
         }
     } catch (e: Exception) {
         e.printStackTrace()
-        return ""
+        return null
     }
 }
