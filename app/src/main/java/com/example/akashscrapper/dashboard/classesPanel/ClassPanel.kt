@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.akashscrapper.R
+import com.example.akashscrapper.dashboard.DashboardActivity
 import com.example.akashscrapper.dashboard.DashboardViewModel
 import com.example.akashscrapper.database.Subject
 import com.example.akashscrapper.utils.observer
+import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.fragment_class_panel.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -22,6 +24,7 @@ class ClassPanel : Fragment() {
     val clickListener = object : ClassesClickListener {
         override fun onClick(id: Int) {
             vm.getSubjectsById(id).observer(viewLifecycleOwner) {
+                vm.subjectItem.postValue(it[0])
                 subjectsAdapter.submitList(it)
             }
         }
@@ -30,6 +33,7 @@ class ClassPanel : Fragment() {
     val subjectClickListener = object : SubjectClickListener {
         override fun onSubjectClicked(subject: Subject) {
             vm.subjectItem.postValue(subject)
+            (activity as DashboardActivity).overlapping_panels.openStartPanel()
         }
     }
 

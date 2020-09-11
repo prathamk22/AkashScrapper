@@ -17,7 +17,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.example.akashscrapper.R
 import com.example.akashscrapper.database.FileDownloadModel
-import com.example.akashscrapper.database.FileDownloadsDao
+import com.example.akashscrapper.database.dao.FileDownloadsDao
 import com.example.akashscrapper.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -75,7 +75,8 @@ class DownloadPdfService : Service() {
                             url,
                             fileNameWithExt,
                             false,
-                            encryptedName
+                            encryptedName,
+                            false
                         )
                     )
                 }

@@ -16,7 +16,7 @@ val viewModelModule = module {
     viewModel { DashboardViewModel(get()) }
     viewModel { PdfViewModel(get()) }
 
-    single { DashboardRepository(get(), get()) }
+    single { DashboardRepository(get(), get(), get()) }
     single { PdfRepository(get()) }
 }
 

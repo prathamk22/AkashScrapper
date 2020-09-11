@@ -1,15 +1,18 @@
 package com.example.akashscrapper.dashboard.filesPanel
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.akashscrapper.R
 import com.example.akashscrapper.dashboard.DashboardViewModel
+import com.example.akashscrapper.pdfActivity.DownloadPdfService
 import com.example.akashscrapper.pdfActivity.PdfActivity
-import com.example.akashscrapper.utils.observer
+import com.example.akashscrapper.utils.*
 import kotlinx.android.synthetic.main.fragment_files_panel.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -42,6 +45,52 @@ class FilesPanel : Fragment() {
                     )
                 )
             }
+
+            override fun onDrawableClick(
+                type: Int,
+                fileName: String,
+                fileId: Int,
+                fileUrl: String
+            ) {
+                when (type) {
+                    1 -> {
+                        //Add to wishlist
+                        vm.updateWishlist(fileId).observer(this@FilesPanel) {
+                            filesRv.showSnackbar(
+                                if (it)
+                                    "Added to Wishlist"
+                                else
+                                    "Removed from Wishlist"
+                            )
+                        }
+                    }
+                    2 -> {
+                        //Download File
+                        if (!requireContext().checkPermission()) {
+                            ActivityCompat.requestPermissions(
+                                requireActivity(),
+                                arrayOf(
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE
+                                ),
+                                STORAGE_PERMISSION
+                            )
+                            filesRv.showSnackbar("Storage Permission not provided", action = false)
+                        } else {
+                            if (!requireContext().isMyServiceRunning(DownloadPdfService::class.java)) {
+                                DownloadPdfService.startService(
+                                    requireContext(),
+                                    fileUrl,
+                                    fileId,
+                                    fileName
+                                )
+                            } else {
+                                //Add to download list
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         vm.subjectItem.observer(viewLifecycleOwner) { subject ->
@@ -52,5 +101,6 @@ class FilesPanel : Fragment() {
         }
 
     }
+
 
 }

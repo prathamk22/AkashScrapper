@@ -1,8 +1,9 @@
-package com.example.akashscrapper.database
+package com.example.akashscrapper.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
+import com.example.akashscrapper.database.Subject
 
 @Dao
 interface SubjectDao : BaseDao<Subject> {

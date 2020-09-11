@@ -89,4 +89,9 @@ class DashboardViewModel(
         }
         return LivePagedListBuilder(dataSourceFactory, config)
     }
+
+    //Users Panel
+    fun updateWishlist(id: Int) = liveData {
+        emit(repo.updateWishlist(id))
+    }
 }

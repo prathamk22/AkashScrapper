@@ -86,7 +86,12 @@ class PdfActivity : AppCompatActivity() {
                     //File added into DB but not downloaded or is downloading
                 }
             } else {
-                downloadFileAndShow()
+                if (!applicationContext.isMyServiceRunning(DownloadPdfService::class.java)) {
+                    downloadFileAndShow()
+                } else {
+                    //Add to download list and queue it
+                    //make DownloadPdfService compatible to download multiple files through one service
+                }
             }
         }
     }
@@ -124,7 +129,12 @@ class PdfActivity : AppCompatActivity() {
             grantResults.isNotEmpty() &&
             grantResults[0] == PackageManager.PERMISSION_GRANTED
         ) {
-            downloadFileAndShow()
+            if (!applicationContext.isMyServiceRunning(DownloadPdfService::class.java)) {
+                downloadFileAndShow()
+            } else {
+                //Add to download list and queue it
+                //make DownloadPdfService compatible to download multiple files through one service
+            }
         }
     }
 

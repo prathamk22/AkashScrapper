@@ -1,4 +1,4 @@
-package com.example.akashscrapper.database
+package com.example.akashscrapper.database.dao
 
 import androidx.room.Delete
 import androidx.room.Insert

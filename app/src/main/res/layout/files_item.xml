@@ -2,13 +2,93 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="150dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="20dp"
+    app:strokeColor="@color/black"
+    app:strokeWidth="1dp"
     android:layout_margin="@dimen/small_margin">
 
-    <TextView
-        android:id="@+id/fileName"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="@dimen/textsize_normal" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/small_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end">
+
+            <ImageView
+                android:id="@+id/wishlist"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:src="@drawable/ic_icon_awesome_heart" />
+
+            <ImageView
+                android:id="@+id/downloadCloud"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:src="@drawable/ic_icon_feather_download_cloud" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/fileName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_bold"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/large_textsize"
+            tools:text="vp mishra sem" />
+
+        <TextView
+            android:id="@+id/ownerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/small_text_size"
+            android:textStyle="bold"
+            tools:text="RP AGIDTM" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fileSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/small_text_size"
+                android:textStyle="bold"
+                tools:text="39 MB" />
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="@dimen/small_margin"
+                android:layout_marginEnd="@dimen/small_margin"
+                android:src="@drawable/ic_icon_awesome_dot_circle" />
+
+            <TextView
+                android:id="@+id/fileViews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/small_text_size"
+                android:textStyle="bold"
+                tools:text="231 Views" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

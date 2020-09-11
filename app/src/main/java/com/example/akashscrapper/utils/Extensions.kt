@@ -2,6 +2,7 @@ package com.example.akashscrapper.utils
 
 import android.Manifest
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -245,4 +246,14 @@ fun File.decryptFile(context: Context, title: String): File? {
         e.printStackTrace()
         return null
     }
+}
+
+fun Context.isMyServiceRunning(serviceClass: Class<*>): Boolean {
+    val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+        if (serviceClass.name == service.service.className) {
+            return true
+        }
+    }
+    return false
 }

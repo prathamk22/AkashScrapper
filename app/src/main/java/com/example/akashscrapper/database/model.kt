@@ -28,5 +28,6 @@ data class FileDownloadModel(
     val fileUrl: String,
     val fileName: String,
     val isDownloaded: Boolean = false,
-    val encryptedFileName: String
+    val encryptedFileName: String,
+    val isWishlisted: Boolean = false
 )

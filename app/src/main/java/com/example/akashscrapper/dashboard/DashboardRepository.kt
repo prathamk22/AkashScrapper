@@ -1,9 +1,10 @@
 package com.example.akashscrapper.dashboard
 
 import com.example.akashscrapper.database.Semester
-import com.example.akashscrapper.database.SemesterDao
 import com.example.akashscrapper.database.Subject
-import com.example.akashscrapper.database.SubjectDao
+import com.example.akashscrapper.database.dao.FileDownloadsDao
+import com.example.akashscrapper.database.dao.SemesterDao
+import com.example.akashscrapper.database.dao.SubjectDao
 import com.example.akashscrapper.network.AkashOnlineLib
 import com.example.akashscrapper.network.models.Subjects
 import com.example.akashscrapper.network.safeApiCall
@@ -11,6 +12,7 @@ import com.example.akashscrapper.network.safeApiCall
 class DashboardRepository(
     private val semesterDao: SemesterDao,
     private val subjectDao: SubjectDao,
+    private val fileDao: FileDownloadsDao
 ) {
 
     suspend fun getToken() = safeApiCall { AkashOnlineLib.api.getToken() }
@@ -32,4 +34,10 @@ class DashboardRepository(
     fun getAllSemesters() = semesterDao.getAllSemesters()
 
     fun getSubjectsById(id: Int) = subjectDao.getAllSubjectsByClassId(id)
+
+    suspend fun updateWishlist(id: Int): Boolean {
+        val isWislisted = fileDao.getWishlist(id).isWishlisted
+        fileDao.setWishlist(!isWislisted, id)
+        return !isWislisted
+    }
 }

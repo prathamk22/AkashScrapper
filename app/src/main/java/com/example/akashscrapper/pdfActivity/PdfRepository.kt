@@ -1,6 +1,6 @@
 package com.example.akashscrapper.pdfActivity
 
-import com.example.akashscrapper.database.FileDownloadsDao
+import com.example.akashscrapper.database.dao.FileDownloadsDao
 
 class PdfRepository(
     private val filesDao: FileDownloadsDao
