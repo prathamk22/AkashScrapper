@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.akashscrapper.R
 import com.example.akashscrapper.dashboard.DashboardViewModel
@@ -14,12 +16,22 @@ import com.example.akashscrapper.pdfActivity.DownloadPdfService
 import com.example.akashscrapper.pdfActivity.PdfActivity
 import com.example.akashscrapper.utils.*
 import kotlinx.android.synthetic.main.fragment_files_panel.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
+@ExperimentalCoroutinesApi
 class FilesPanel : Fragment() {
 
     val vm: DashboardViewModel by sharedViewModel()
     val filesAdapter = FilesPagedAdapter()
+    private var searchJob: Job? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,11 +105,25 @@ class FilesPanel : Fragment() {
             }
         }
 
+        GlobalScope.launch {
+            filesAdapter
+                .loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect { filesRv.scrollToPosition(0) }
+        }
+
         vm.subjectItem.observer(viewLifecycleOwner) { subject ->
-            vm.getFilesBySubject(subject.subjectName)
-            vm.filesLiveData.observer(viewLifecycleOwner) {
-                filesAdapter.submitList(it)
+            searchJob?.cancel()
+            searchJob = lifecycleScope.launch {
+                vm.getFilesByKey(subject.subjectName).collect {
+                    filesAdapter.submitData(it)
+                }
             }
+//            vm.getFilesBySubject(subject.subjectName)
+//            vm.filesLiveData.observer(viewLifecycleOwner) {
+//                filesAdapter.submitList(it)
+//            }
         }
 
     }

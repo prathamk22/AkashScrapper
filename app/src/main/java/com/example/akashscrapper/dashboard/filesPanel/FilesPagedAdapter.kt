@@ -3,7 +3,7 @@ package com.example.akashscrapper.dashboard.filesPanel
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.akashscrapper.R
@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.files_item.view.*
 import org.json.JSONObject
 
 class FilesPagedAdapter :
-    PagedListAdapter<Data, FilesViewHolder>(object : DiffUtil.ItemCallback<Data>() {
+    PagingDataAdapter<Data, FilesViewHolder>(object : DiffUtil.ItemCallback<Data>() {
         override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
             return oldItem == newItem
         }
