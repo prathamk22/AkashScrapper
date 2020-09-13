@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.akashscrapper.R
 import com.example.akashscrapper.dashboard.DashboardActivity
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.fragment_class_panel.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
+@ExperimentalPagingApi
 class ClassPanel : Fragment() {
 
     val vm: DashboardViewModel by sharedViewModel()

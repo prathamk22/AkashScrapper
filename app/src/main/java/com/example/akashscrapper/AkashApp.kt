@@ -39,7 +39,7 @@ class AkashApp : Application() {
 
         if (BuildConfig.DEBUG) {
             AkashOnlineLib.httpLogging = true
-            Stetho.initializeWithDefaults(this);
+            Stetho.initializeWithDefaults(this)
         }
 
         startKoin {

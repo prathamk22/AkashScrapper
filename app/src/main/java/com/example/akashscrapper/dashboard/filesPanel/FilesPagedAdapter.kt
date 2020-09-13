@@ -1,5 +1,6 @@
 package com.example.akashscrapper.dashboard.filesPanel
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,17 +8,17 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.akashscrapper.R
-import com.example.akashscrapper.network.models.Data
+import com.example.akashscrapper.database.FileData
 import kotlinx.android.synthetic.main.files_item.view.*
 import org.json.JSONObject
 
 class FilesPagedAdapter :
-    PagingDataAdapter<Data, FilesViewHolder>(object : DiffUtil.ItemCallback<Data>() {
-        override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
+    PagingDataAdapter<FileData, FilesViewHolder>(object : DiffUtil.ItemCallback<FileData>() {
+        override fun areItemsTheSame(oldItem: FileData, newItem: FileData): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: Data, newItem: Data): Boolean {
+        override fun areContentsTheSame(oldItem: FileData, newItem: FileData): Boolean {
             return oldItem.document_id == newItem.document_id
         }
 
@@ -31,6 +32,7 @@ class FilesPagedAdapter :
     }
 
     override fun onBindViewHolder(holder: FilesViewHolder, position: Int) {
+        Log.e("TAG", "onBindViewHolder: $position")
         holder.bind(getItem(position))
         holder.onClick = onClick
     }
@@ -39,7 +41,7 @@ class FilesPagedAdapter :
 class FilesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     var onClick: FileClickListener? = null
-    fun bind(item: Data?) {
+    fun bind(item: FileData?) {
         with(itemView) {
             try {
                 val jsonObject = JSONObject(item?.document_contributor ?: "")

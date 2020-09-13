@@ -16,7 +16,7 @@ val viewModelModule = module {
     viewModel { DashboardViewModel(get()) }
     viewModel { PdfViewModel(get()) }
 
-    single { DashboardRepository(get(), get(), get()) }
+    single { DashboardRepository(get(), get(), get(), get()) }
     single { PdfRepository(get()) }
 }
 
@@ -50,6 +50,16 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.filesDao()
+    }
+
+    factory {
+        val database: AppDatabase = get()
+        database.fileDataDao()
+    }
+
+    factory {
+        val database: AppDatabase = get()
+        database.remoteKeysDao()
     }
 }
 

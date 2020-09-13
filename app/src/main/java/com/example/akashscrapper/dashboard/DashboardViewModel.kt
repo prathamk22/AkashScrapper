@@ -6,14 +6,17 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
 import com.example.akashscrapper.dashboard.filesPanel.FilesDataSource
+import com.example.akashscrapper.database.FileData
 import com.example.akashscrapper.database.Subject
 import com.example.akashscrapper.network.ResultWrapper
 import com.example.akashscrapper.network.models.Data
 import com.example.akashscrapper.utils.BaseViewModel
 import com.example.akashscrapper.utils.runIO
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
+@ExperimentalCoroutinesApi
 class DashboardViewModel(
     private val repo: DashboardRepository
 ) : BaseViewModel() {
@@ -91,15 +94,16 @@ class DashboardViewModel(
 
     private var currentQueryValue: String? = null
 
-    private var currentSearchResult: Flow<PagingData<Data>>? = null
+    private var currentSearchResult: Flow<PagingData<FileData>>? = null
 
-    fun getFilesByKey(key: String): Flow<PagingData<Data>> {
+    @ExperimentalPagingApi
+    fun getFilesByKey(key: String): Flow<PagingData<FileData>> {
         val lastResult = currentSearchResult
         if (key == currentQueryValue && lastResult != null) {
             return lastResult
         }
         currentQueryValue = key
-        val newResult: Flow<PagingData<Data>> = repo.getFilesByKey(key)
+        val newResult = repo.getFilesByKey(key)
             .cachedIn(viewModelScope)
         currentSearchResult = newResult
         return newResult

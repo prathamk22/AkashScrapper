@@ -2,6 +2,7 @@ package com.example.akashscrapper.dashboard
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.paging.ExperimentalPagingApi
 import com.example.akashscrapper.R
 import com.example.akashscrapper.dashboard.classesPanel.ClassPanel
 import com.example.akashscrapper.dashboard.filesPanel.FilesPanel
@@ -13,6 +14,7 @@ import com.example.akashscrapper.utils.showSnackbar
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
+@ExperimentalPagingApi
 class DashboardActivity : AppCompatActivity() {
 
     val vm: DashboardViewModel by stateViewModel()

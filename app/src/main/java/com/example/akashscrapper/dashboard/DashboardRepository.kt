@@ -1,16 +1,18 @@
 package com.example.akashscrapper.dashboard
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.akashscrapper.dashboard.filesPanel.FilesPagingSource
+import com.example.akashscrapper.database.AppDatabase
+import com.example.akashscrapper.database.FileData
 import com.example.akashscrapper.database.Semester
 import com.example.akashscrapper.database.Subject
 import com.example.akashscrapper.database.dao.FileDownloadsDao
 import com.example.akashscrapper.database.dao.SemesterDao
 import com.example.akashscrapper.database.dao.SubjectDao
 import com.example.akashscrapper.network.AkashOnlineLib
-import com.example.akashscrapper.network.models.Data
 import com.example.akashscrapper.network.models.Subjects
 import com.example.akashscrapper.network.safeApiCall
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +20,8 @@ import kotlinx.coroutines.flow.Flow
 class DashboardRepository(
     private val semesterDao: SemesterDao,
     private val subjectDao: SubjectDao,
-    private val fileDao: FileDownloadsDao
+    private val fileDao: FileDownloadsDao,
+    private val appDatabase: AppDatabase
 ) {
 
     companion object {
@@ -34,11 +37,14 @@ class DashboardRepository(
 
     suspend fun insertSemester(branch: Int, branchName: String, semester: Int): Long {
         val semesterValue = semesterDao.getSemesterByBranch(branch, semester)
-        return if (semesterValue == null) {
-            semesterDao.insert(Semester(0, semester, branch, branchName))
-        } else {
-            semesterValue.id.toLong()
-        }
+        return semesterValue?.id?.toLong() ?: semesterDao.insert(
+            Semester(
+                0,
+                semester,
+                branch,
+                branchName
+            )
+        )
     }
 
     fun getAllSemesters() = semesterDao.getAllSemesters()
@@ -51,17 +57,19 @@ class DashboardRepository(
         return !isWislisted
     }
 
-
     //paging 3
-    fun getFilesByKey(key: String): Flow<PagingData<Data>> {
+    @ExperimentalPagingApi
+    fun getFilesByKey(key: String): Flow<PagingData<FileData>> {
+
+        val pagingSource = { appDatabase.fileDataDao().getFiles(key) }
+
         return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = true
+            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
+            remoteMediator = FilesPagingSource(
+                key,
+                appDatabase
             ),
-            pagingSourceFactory = {
-                FilesPagingSource(key)
-            }
+            pagingSourceFactory = pagingSource
         ).flow
     }
 

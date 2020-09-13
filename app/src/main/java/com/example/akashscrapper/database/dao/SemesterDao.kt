@@ -12,5 +12,5 @@ interface SemesterDao : BaseDao<Semester> {
     fun getAllSemesters(): LiveData<List<Semester>>
 
     @Query("SELECT * FROM Semester WHERE branch = :branch AND semester = :semester")
-    suspend fun getSemesterByBranch(branch: Int, semester: Int): Semester
+    suspend fun getSemesterByBranch(branch: Int, semester: Int): Semester?
 }

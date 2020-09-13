@@ -2,13 +2,14 @@ package com.example.akashscrapper.dashboard.filesPanel
 
 import android.Manifest
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
+import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.akashscrapper.R
 import com.example.akashscrapper.dashboard.DashboardViewModel
@@ -17,15 +18,13 @@ import com.example.akashscrapper.pdfActivity.PdfActivity
 import com.example.akashscrapper.utils.*
 import kotlinx.android.synthetic.main.fragment_files_panel.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 @ExperimentalCoroutinesApi
+@ExperimentalPagingApi
 class FilesPanel : Fragment() {
 
     val vm: DashboardViewModel by sharedViewModel()
@@ -105,18 +104,12 @@ class FilesPanel : Fragment() {
             }
         }
 
-        GlobalScope.launch {
-            filesAdapter
-                .loadStateFlow
-                .distinctUntilChangedBy { it.refresh }
-                .filter { it.refresh is LoadState.NotLoading }
-                .collect { filesRv.scrollToPosition(0) }
-        }
 
         vm.subjectItem.observer(viewLifecycleOwner) { subject ->
             searchJob?.cancel()
             searchJob = lifecycleScope.launch {
-                vm.getFilesByKey(subject.subjectName).collect {
+                vm.getFilesByKey(subject.subjectName).collectLatest {
+                    Log.e("TAG", "onViewCreated: HEre")
                     filesAdapter.submitData(it)
                 }
             }
@@ -127,6 +120,5 @@ class FilesPanel : Fragment() {
         }
 
     }
-
 
 }

@@ -82,7 +82,7 @@ data class CourseX(
 data class Data(
     val category: Category,
     val created_at: String,
-    val deleted_at: Any,
+    val deleted_at: String,
     val document_absolute_path: String,
     val document_category_id: Int,
     val document_contributor: String,
@@ -99,7 +99,7 @@ data class Data(
     val subject: Subject,
     val subject_id: Int,
     val updated_at: String,
-    val uploaded_by_user_id: Any
+    val uploaded_by_user_id: String
 )
 
 data class Documents(
