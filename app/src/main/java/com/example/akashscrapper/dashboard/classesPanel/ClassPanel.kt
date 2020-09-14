@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_class_panel.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 @ExperimentalPagingApi
+//TODO() = Add a seperator for classes in class RV
 class ClassPanel : Fragment() {
 
     val vm: DashboardViewModel by sharedViewModel()

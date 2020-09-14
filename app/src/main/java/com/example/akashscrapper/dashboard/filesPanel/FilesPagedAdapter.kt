@@ -1,6 +1,5 @@
 package com.example.akashscrapper.dashboard.filesPanel
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +31,6 @@ class FilesPagedAdapter :
     }
 
     override fun onBindViewHolder(holder: FilesViewHolder, position: Int) {
-        Log.e("TAG", "onBindViewHolder: $position")
         holder.bind(getItem(position))
         holder.onClick = onClick
     }

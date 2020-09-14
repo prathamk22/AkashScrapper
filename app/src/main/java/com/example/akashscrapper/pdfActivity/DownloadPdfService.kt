@@ -10,14 +10,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.example.akashscrapper.R
-import com.example.akashscrapper.database.FileDownloadModel
-import com.example.akashscrapper.database.dao.FileDownloadsDao
+import com.example.akashscrapper.database.dao.FileDataDao
 import com.example.akashscrapper.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -25,6 +23,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import java.io.File
 
+//TODO() Make it accessible for mutlifile downloads
 class DownloadPdfService : Service() {
 
     companion object {
@@ -46,7 +45,7 @@ class DownloadPdfService : Service() {
         return null
     }
 
-    private val fileDownloadDao: FileDownloadsDao by inject()
+    private val fileData: FileDataDao by inject()
     lateinit var receiver: BroadcastReceiver
     lateinit var intentFilter: IntentFilter
 
@@ -62,24 +61,10 @@ class DownloadPdfService : Service() {
             val fileName = intent.getStringExtra(FILE_NAME)
             val fileNameWithExt = "$fileName.pdf"
             val url = intent.getStringExtra(FILE_URL)
-            val id = intent.getIntExtra(FILE_ID, 0) ?: 0
-            val encryptedName = "${fileName}_encrypted.dat"
-            Log.e("TAG", "onStartCommand: Download Started")
+            val id = intent.getIntExtra(FILE_ID, 0)
 
             if (fileName?.isNotEmpty() == true && url?.isNotEmpty() == true) {
                 startForeground()
-                GlobalScope.launch(Dispatchers.IO) {
-                    fileDownloadDao.insert(
-                        FileDownloadModel(
-                            id,
-                            url,
-                            fileNameWithExt,
-                            false,
-                            encryptedName,
-                            false
-                        )
-                    )
-                }
 
                 intentFilter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
                 val downloadManager =
@@ -101,29 +86,17 @@ class DownloadPdfService : Service() {
                         )
 
                         if (file.exists()) {
-                            if (file.encryptFile(applicationContext, encryptedName)) {
+                            if (file.encryptFile(applicationContext, fileName.getEncryptedName())) {
                                 file.delete()
                             }
                             GlobalScope.launch(Dispatchers.IO) {
-                                fileDownloadDao.fileDownloaded(true, id)
+                                fileData.fileDownloaded(true, id)
                             }
                             Toast.makeText(
                                 applicationContext,
                                 "$fileName download Completed",
                                 Toast.LENGTH_SHORT
                             ).show()
-                        } else {
-                            GlobalScope.launch(Dispatchers.IO) {
-                                fileDownloadDao.delete(
-                                    FileDownloadModel(
-                                        id,
-                                        url,
-                                        fileNameWithExt,
-                                        false,
-                                        encryptedName
-                                    )
-                                )
-                            }
                         }
 
                         stopServiceManually()

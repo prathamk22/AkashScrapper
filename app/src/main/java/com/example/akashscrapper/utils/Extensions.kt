@@ -17,6 +17,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import androidx.security.crypto.EncryptedFile
 import androidx.security.crypto.MasterKeys
 import com.example.akashscrapper.R
@@ -119,11 +122,24 @@ fun ViewModel.runIO(function: suspend CoroutineScope.() -> Unit) {
     viewModelScope.launch(Dispatchers.IO) { function() }
 }
 
+fun RecyclerView.setRv(
+    activity: Context,
+    listAdapter: ListAdapter<out Any, out RecyclerView.ViewHolder>,
+    orientation: Int = RecyclerView.VERTICAL,
+    reverse: Boolean = false
+) {
+    layoutManager = LinearLayoutManager(activity, orientation, reverse)
+    adapter = listAdapter
+}
+
+fun String.getEncryptedName() =
+    if (this.endsWith("pdf")) "${this}_encrypted.dat" else "${this}.pdf_encrypted.dat"
+
 fun View.showSnackbar(
     message: String,
     length: Int = Snackbar.LENGTH_SHORT,
     anchorView: BottomNavigationView? = null,
-    action: Boolean = true,
+    action: Boolean = false,
     actionText: String = "Retry",
     callback: () -> Unit = { }
 ): Snackbar {

@@ -33,14 +33,6 @@ data class FileDownloadModel(
 )
 
 @Entity
-data class RemoteKeys(
-    @PrimaryKey
-    val fileId: Int,
-    val prevKey: Int?,
-    val nextKey: Int?
-)
-
-@Entity
 data class FileData(
     @PrimaryKey
     val document_id: Int,
@@ -60,5 +52,7 @@ data class FileData(
     val ratings_count: String,
     val subject_id: Int,
     val updated_at: String,
-    val uploaded_by_user_id: String?
+    val uploaded_by_user_id: String?,
+    val isDownloaded: Boolean? = false,
+    val isWishlisted: Boolean? = false
 )

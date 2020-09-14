@@ -1,15 +1,14 @@
 package com.example.akashscrapper.dashboard
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import androidx.paging.*
-import com.example.akashscrapper.dashboard.filesPanel.FilesDataSource
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.akashscrapper.database.FileData
 import com.example.akashscrapper.database.Subject
 import com.example.akashscrapper.network.ResultWrapper
-import com.example.akashscrapper.network.models.Data
 import com.example.akashscrapper.utils.BaseViewModel
 import com.example.akashscrapper.utils.runIO
 import kotlinx.coroutines.Dispatchers
@@ -71,27 +70,6 @@ class DashboardViewModel(
     }
 
     //Files Panel
-    lateinit var filesLiveData: LiveData<PagedList<Data>>
-
-    fun getFilesBySubject(key: String) {
-        val config = PagedList.Config.Builder()
-            .setPageSize(10)
-            .setEnablePlaceholders(true)
-            .build()
-        filesLiveData = initializedPagedListBuilder(config, key).build()
-    }
-
-    private fun initializedPagedListBuilder(config: PagedList.Config, key: String):
-            LivePagedListBuilder<String, Data> {
-
-        val dataSourceFactory = object : DataSource.Factory<String, Data>() {
-            override fun create(): DataSource<String, Data> {
-                return FilesDataSource(viewModelScope, key)
-            }
-        }
-        return LivePagedListBuilder(dataSourceFactory, config)
-    }
-
     private var currentQueryValue: String? = null
 
     private var currentSearchResult: Flow<PagingData<FileData>>? = null
@@ -109,8 +87,12 @@ class DashboardViewModel(
         return newResult
     }
 
-    //Users Panel
     fun updateWishlist(id: Int) = liveData {
         emit(repo.updateWishlist(id))
     }
+
+    //Users Panel
+    fun getDownloadList() = repo.getDownloadList()
+
+    fun getWishlisted() = repo.getWishlisted()
 }

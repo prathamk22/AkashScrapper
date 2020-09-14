@@ -8,15 +8,17 @@ import com.example.akashscrapper.database.AppDatabase
 import com.example.akashscrapper.pdfActivity.PdfRepository
 import com.example.akashscrapper.pdfActivity.PdfViewModel
 import com.example.akashscrapper.utils.PreferenceHelper
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
+@ExperimentalCoroutinesApi
 val viewModelModule = module {
     viewModel { DashboardViewModel(get()) }
     viewModel { PdfViewModel(get()) }
 
-    single { DashboardRepository(get(), get(), get(), get()) }
+    single { DashboardRepository(get(), get(), get()) }
     single { PdfRepository(get()) }
 }
 
@@ -55,11 +57,6 @@ val databaseModule = module {
     factory {
         val database: AppDatabase = get()
         database.fileDataDao()
-    }
-
-    factory {
-        val database: AppDatabase = get()
-        database.remoteKeysDao()
     }
 }
 

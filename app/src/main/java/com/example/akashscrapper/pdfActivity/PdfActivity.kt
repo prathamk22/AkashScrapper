@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -47,31 +48,22 @@ class PdfActivity : AppCompatActivity() {
         }
 
         vm.getFileById(fileId).observe(this) {
-            if (it != null) {
-                if (it.isDownloaded) {
-                    val file =
-                        File("${applicationContext.getDirectoryName()}/${it.encryptedFileName}")
-                    if (file.exists()) {
-                        val tempFile = file.decryptFile(applicationContext, it.encryptedFileName)
-                        this.tempFile = tempFile
-                        if (tempFile?.exists() == true) {
-                            pdfViewPager = PDFViewPager(this, tempFile.absolutePath)
+            if (it.isDownloaded == true) {
+                val file =
+                    File("${applicationContext.getDirectoryName()}/${it.document_title.getEncryptedName()}")
+                Log.e("TAG", "onCreate: ${it.document_title.getEncryptedName()}")
+                if (file.exists()) {
+                    val tempFile =
+                        file.decryptFile(applicationContext, it.document_title.getEncryptedName())
+                    this.tempFile = tempFile
+                    if (tempFile?.exists() == true) {
+                        pdfViewPager = PDFViewPager(this, tempFile.absolutePath)
 
-                            parentView.addView(
-                                pdfViewPager,
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT
-                            )
-                        } else {
-                            parentView.showSnackbar(
-                                "Error reading File. Download again?",
-                                length = Snackbar.LENGTH_INDEFINITE,
-                                actionText = "Download"
-                            ) {
-                                file.delete()
-                                vm.deleteFile(fileId)
-                            }
-                        }
+                        parentView.addView(
+                            pdfViewPager,
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
                     } else {
                         parentView.showSnackbar(
                             "Error reading File. Download again?",
@@ -83,7 +75,14 @@ class PdfActivity : AppCompatActivity() {
                         }
                     }
                 } else {
-                    //File added into DB but not downloaded or is downloading
+                    parentView.showSnackbar(
+                        "Error reading File. Download again?",
+                        length = Snackbar.LENGTH_INDEFINITE,
+                        actionText = "Download"
+                    ) {
+                        file.delete()
+                        vm.deleteFile(fileId)
+                    }
                 }
             } else {
                 if (!applicationContext.isMyServiceRunning(DownloadPdfService::class.java)) {

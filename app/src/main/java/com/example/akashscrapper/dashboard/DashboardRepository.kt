@@ -9,7 +9,6 @@ import com.example.akashscrapper.database.AppDatabase
 import com.example.akashscrapper.database.FileData
 import com.example.akashscrapper.database.Semester
 import com.example.akashscrapper.database.Subject
-import com.example.akashscrapper.database.dao.FileDownloadsDao
 import com.example.akashscrapper.database.dao.SemesterDao
 import com.example.akashscrapper.database.dao.SubjectDao
 import com.example.akashscrapper.network.AkashOnlineLib
@@ -20,7 +19,6 @@ import kotlinx.coroutines.flow.Flow
 class DashboardRepository(
     private val semesterDao: SemesterDao,
     private val subjectDao: SubjectDao,
-    private val fileDao: FileDownloadsDao,
     private val appDatabase: AppDatabase
 ) {
 
@@ -52,25 +50,27 @@ class DashboardRepository(
     fun getSubjectsById(id: Int) = subjectDao.getAllSubjectsByClassId(id)
 
     suspend fun updateWishlist(id: Int): Boolean {
-        val isWislisted = fileDao.getWishlist(id).isWishlisted
-        fileDao.setWishlist(!isWislisted, id)
+        val isWislisted = appDatabase.fileDataDao().getWishlist(id).isWishlisted ?: false
+        appDatabase.fileDataDao().setWishlist(!isWislisted, id)
         return !isWislisted
     }
 
     //paging 3
     @ExperimentalPagingApi
     fun getFilesByKey(key: String): Flow<PagingData<FileData>> {
-
-        val pagingSource = { appDatabase.fileDataDao().getFiles(key) }
-
         return Pager(
-            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
-            remoteMediator = FilesPagingSource(
-                key,
-                appDatabase
+            config = PagingConfig(
+                pageSize = NETWORK_PAGE_SIZE,
+                enablePlaceholders = true
             ),
-            pagingSourceFactory = pagingSource
+            pagingSourceFactory = {
+                FilesPagingSource(key, appDatabase)
+            }
         ).flow
     }
+
+    fun getDownloadList() = appDatabase.fileDataDao().getDownloaded()
+
+    fun getWishlisted() = appDatabase.fileDataDao().getAllWishlisted()
 
 }

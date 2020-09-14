@@ -2,7 +2,6 @@ package com.example.akashscrapper.dashboard.filesPanel
 
 import android.Manifest
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,7 @@ import com.example.akashscrapper.utils.*
 import kotlinx.android.synthetic.main.fragment_files_panel.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -78,6 +77,7 @@ class FilesPanel : Fragment() {
                     2 -> {
                         //Download File
                         if (!requireContext().checkPermission()) {
+                            filesRv.showSnackbar("Storage Permission not provided")
                             ActivityCompat.requestPermissions(
                                 requireActivity(),
                                 arrayOf(
@@ -86,7 +86,6 @@ class FilesPanel : Fragment() {
                                 ),
                                 STORAGE_PERMISSION
                             )
-                            filesRv.showSnackbar("Storage Permission not provided", action = false)
                         } else {
                             if (!requireContext().isMyServiceRunning(DownloadPdfService::class.java)) {
                                 DownloadPdfService.startService(
@@ -104,19 +103,13 @@ class FilesPanel : Fragment() {
             }
         }
 
-
         vm.subjectItem.observer(viewLifecycleOwner) { subject ->
             searchJob?.cancel()
             searchJob = lifecycleScope.launch {
-                vm.getFilesByKey(subject.subjectName).collectLatest {
-                    Log.e("TAG", "onViewCreated: HEre")
+                vm.getFilesByKey(subject.subjectName).collect {
                     filesAdapter.submitData(it)
                 }
             }
-//            vm.getFilesBySubject(subject.subjectName)
-//            vm.filesLiveData.observer(viewLifecycleOwner) {
-//                filesAdapter.submitList(it)
-//            }
         }
 
     }
