@@ -27,9 +27,10 @@ data class FileDownloadModel(
     val fileId: Int,
     val fileUrl: String,
     val fileName: String,
-    val isDownloaded: Boolean = false,
-    val encryptedFileName: String,
-    val isWishlisted: Boolean = false
+    val subjectName: String,
+    val lastVisited: Long = 0,
+    val isDownloaded: Boolean? = null,
+    val isWishlisted: Boolean = false,
 )
 
 @Entity
@@ -52,7 +53,5 @@ data class FileData(
     val ratings_count: String,
     val subject_id: Int,
     val updated_at: String,
-    val uploaded_by_user_id: String?,
-    val isDownloaded: Boolean? = false,
-    val isWishlisted: Boolean? = false
+    val uploaded_by_user_id: String?
 )

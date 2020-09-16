@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,11 +19,18 @@ import java.io.File
 class PdfActivity : AppCompatActivity() {
 
     companion object {
-        fun getInstance(context: Context, fileUrl: String, fileId: Int, fileName: String): Intent {
+        fun getInstance(
+            context: Context,
+            fileUrl: String,
+            fileId: Int,
+            fileName: String,
+            subjectName: String
+        ): Intent {
             return Intent(context, PdfActivity::class.java).apply {
                 putExtra(FILE_URL, fileUrl)
                 putExtra(FILE_NAME, fileName)
                 putExtra(FILE_ID, fileId)
+                putExtra(SUBJECT_NAME, subjectName)
             }
         }
     }
@@ -33,6 +39,7 @@ class PdfActivity : AppCompatActivity() {
     lateinit var pdfViewPager: PDFViewPager
 
     lateinit var fileName: String
+    lateinit var subjectName: String
     lateinit var fileUrl: String
     var tempFile: File? = null
     var fileId: Int = 0
@@ -45,25 +52,37 @@ class PdfActivity : AppCompatActivity() {
             fileName = "${intent.getStringExtra(FILE_NAME)}.pdf"
             fileUrl = intent.getStringExtra(FILE_URL)
             fileId = intent.getIntExtra(FILE_ID, 0)
+            subjectName = intent.getStringExtra(SUBJECT_NAME)
         }
 
         vm.getFileById(fileId).observe(this) {
-            if (it.isDownloaded == true) {
-                val file =
-                    File("${applicationContext.getDirectoryName()}/${it.document_title.getEncryptedName()}")
-                Log.e("TAG", "onCreate: ${it.document_title.getEncryptedName()}")
-                if (file.exists()) {
-                    val tempFile =
-                        file.decryptFile(applicationContext, it.document_title.getEncryptedName())
-                    this.tempFile = tempFile
-                    if (tempFile?.exists() == true) {
-                        pdfViewPager = PDFViewPager(this, tempFile.absolutePath)
+            if (it != null) {
+                if (it.isDownloaded == true) {
+                    val file =
+                        File("${applicationContext.getDirectoryName()}/${it.fileName.getEncryptedName()}")
 
-                        parentView.addView(
-                            pdfViewPager,
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                        )
+                    if (file.exists()) {
+                        vm.updateTime(fileId)
+                        val tempFile =
+                            file.decryptFile(applicationContext, it.fileName.getEncryptedName())
+                        this.tempFile = tempFile
+                        if (tempFile?.exists() == true) {
+                            pdfViewPager = PDFViewPager(this, tempFile.absolutePath)
+                            parentView.addView(
+                                pdfViewPager,
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT
+                            )
+                        } else {
+                            parentView.showSnackbar(
+                                "Error reading File. Download again?",
+                                length = Snackbar.LENGTH_INDEFINITE,
+                                actionText = "Download"
+                            ) {
+                                file.delete()
+                                vm.deleteFile(fileId)
+                            }
+                        }
                     } else {
                         parentView.showSnackbar(
                             "Error reading File. Download again?",
@@ -74,14 +93,12 @@ class PdfActivity : AppCompatActivity() {
                             vm.deleteFile(fileId)
                         }
                     }
-                } else {
-                    parentView.showSnackbar(
-                        "Error reading File. Download again?",
-                        length = Snackbar.LENGTH_INDEFINITE,
-                        actionText = "Download"
-                    ) {
-                        file.delete()
-                        vm.deleteFile(fileId)
+                } else if (it.isDownloaded == null) {
+                    if (!applicationContext.isMyServiceRunning(DownloadPdfService::class.java)) {
+                        downloadFileAndShow()
+                    } else {
+                        //Add to download list and queue it
+                        //make DownloadPdfService compatible to download multiple files through one service
                     }
                 }
             } else {
@@ -112,7 +129,8 @@ class PdfActivity : AppCompatActivity() {
                 applicationContext,
                 fileUrl,
                 fileId,
-                fileName
+                fileName,
+                subjectName
             )
         }
     }

@@ -87,8 +87,8 @@ class DashboardViewModel(
         return newResult
     }
 
-    fun updateWishlist(id: Int) = liveData {
-        emit(repo.updateWishlist(id))
+    fun updateWishlist(id: Int, fileName: String, fileUrl: String) = liveData {
+        emit(repo.updateWishlist(id, fileName, fileUrl))
     }
 
     //Users Panel

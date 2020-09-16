@@ -2,7 +2,6 @@ package com.example.akashscrapper.dashboard.classesPanel
 
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -24,18 +23,10 @@ class SubjectsAdapter : ListAdapter<Subject, SubjectsAdapter.SubjectsViewHolder>
         holder.subjectClickListener = subjectClickListener
     }
 
-    inner class SubjectsViewHolder(
+    class SubjectsViewHolder(
         itemView: View
-    ) : RecyclerView.ViewHolder(itemView), OnClickListener {
+    ) : RecyclerView.ViewHolder(itemView) {
         var subjectClickListener: SubjectClickListener? = null
-        init {
-            itemView.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View?) {
-
-            if (adapterPosition == RecyclerView.NO_POSITION) return
-        }
 
         fun bind(item: Subject) = with(itemView) {
             subjectName.text = item.subjectName

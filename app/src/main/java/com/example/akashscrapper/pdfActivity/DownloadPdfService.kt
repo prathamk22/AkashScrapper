@@ -15,7 +15,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.example.akashscrapper.R
-import com.example.akashscrapper.database.dao.FileDataDao
+import com.example.akashscrapper.database.FileDownloadModel
+import com.example.akashscrapper.database.dao.FileDownloadsDao
 import com.example.akashscrapper.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -27,11 +28,18 @@ import java.io.File
 class DownloadPdfService : Service() {
 
     companion object {
-        fun startService(context: Context, fileUrl: String, fileId: Int, fileName: String) {
+        fun startService(
+            context: Context,
+            fileUrl: String,
+            fileId: Int,
+            fileName: String,
+            subjectName: String
+        ) {
             val intent = Intent(context, DownloadPdfService::class.java).apply {
                 putExtra(FILE_URL, fileUrl)
                 putExtra(FILE_NAME, fileName)
                 putExtra(FILE_ID, fileId)
+                putExtra(SUBJECT_NAME, subjectName)
             }
             ContextCompat.startForegroundService(context, intent)
         }
@@ -45,7 +53,7 @@ class DownloadPdfService : Service() {
         return null
     }
 
-    private val fileData: FileDataDao by inject()
+    private val fileData: FileDownloadsDao by inject()
     lateinit var receiver: BroadcastReceiver
     lateinit var intentFilter: IntentFilter
 
@@ -59,9 +67,26 @@ class DownloadPdfService : Service() {
             notificationManager.cancel(NOTIFICATION_ID)
         } else {
             val fileName = intent.getStringExtra(FILE_NAME)
+            val subjectName = intent.getStringExtra(SUBJECT_NAME)
             val fileNameWithExt = "$fileName.pdf"
             val url = intent.getStringExtra(FILE_URL)
             val id = intent.getIntExtra(FILE_ID, 0)
+
+            GlobalScope.launch {
+                if (fileData.getWishlist(id) == null) {
+                    fileData.insert(
+                        FileDownloadModel(
+                            id,
+                            url,
+                            fileNameWithExt,
+                            subjectName,
+                            lastVisited = System.currentTimeMillis(),
+                            isDownloaded = false,
+                            isWishlisted = false
+                        )
+                    )
+                }
+            }
 
             if (fileName?.isNotEmpty() == true && url?.isNotEmpty() == true) {
                 startForeground()
@@ -86,7 +111,11 @@ class DownloadPdfService : Service() {
                         )
 
                         if (file.exists()) {
-                            if (file.encryptFile(applicationContext, fileName.getEncryptedName())) {
+                            if (file.encryptFile(
+                                    applicationContext,
+                                    fileNameWithExt.getEncryptedName()
+                                )
+                            ) {
                                 file.delete()
                             }
                             GlobalScope.launch(Dispatchers.IO) {

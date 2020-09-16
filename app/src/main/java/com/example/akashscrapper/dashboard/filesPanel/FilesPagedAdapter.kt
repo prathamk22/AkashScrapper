@@ -44,9 +44,9 @@ class FilesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             try {
                 val jsonObject = JSONObject(item?.document_contributor ?: "")
                 val name = jsonObject.getString("name")
-                ownerName.text = name
+                ownerName.text = "By $name"
             } catch (e: Exception) {
-                ownerName.text = item?.document_contributor
+                ownerName.text = "By ${item?.document_contributor}"
             }
             fileName.text = item?.document_title
             val float = item?.document_size?.div(1024 * 1024)

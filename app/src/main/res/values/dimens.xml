@@ -6,6 +6,6 @@
     <dimen name="margin_large">20dp</dimen>
     <dimen name="textsize_normal">18sp</dimen>
     <dimen name="smallest_text_size">12sp</dimen>
-    <dimen name="large_textsize">32sp</dimen>
+    <dimen name="large_textsize">34sp</dimen>
     <dimen name="small_text_size">14sp</dimen>
 </resources>

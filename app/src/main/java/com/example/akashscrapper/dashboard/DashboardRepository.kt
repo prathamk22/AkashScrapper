@@ -5,20 +5,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.akashscrapper.dashboard.filesPanel.FilesPagingSource
-import com.example.akashscrapper.database.AppDatabase
-import com.example.akashscrapper.database.FileData
-import com.example.akashscrapper.database.Semester
-import com.example.akashscrapper.database.Subject
-import com.example.akashscrapper.database.dao.SemesterDao
-import com.example.akashscrapper.database.dao.SubjectDao
+import com.example.akashscrapper.database.*
 import com.example.akashscrapper.network.AkashOnlineLib
 import com.example.akashscrapper.network.models.Subjects
 import com.example.akashscrapper.network.safeApiCall
 import kotlinx.coroutines.flow.Flow
 
 class DashboardRepository(
-    private val semesterDao: SemesterDao,
-    private val subjectDao: SubjectDao,
     private val appDatabase: AppDatabase
 ) {
 
@@ -31,11 +24,12 @@ class DashboardRepository(
     suspend fun getSubjects() = safeApiCall { AkashOnlineLib.api.getSubjects(1) }
 
     suspend fun insertSubject(subject: Subjects, id: Int) =
-        subjectDao.insert(Subject(subject.id, id, subject.subjectName, subject.subjectAbbrevation))
+        appDatabase.subjectDao()
+            .insert(Subject(subject.id, id, subject.subjectName, subject.subjectAbbrevation))
 
     suspend fun insertSemester(branch: Int, branchName: String, semester: Int): Long {
-        val semesterValue = semesterDao.getSemesterByBranch(branch, semester)
-        return semesterValue?.id?.toLong() ?: semesterDao.insert(
+        val semesterValue = appDatabase.getSemesterDao().getSemesterByBranch(branch, semester)
+        return semesterValue?.id?.toLong() ?: appDatabase.getSemesterDao().insert(
             Semester(
                 0,
                 semester,
@@ -45,14 +39,27 @@ class DashboardRepository(
         )
     }
 
-    fun getAllSemesters() = semesterDao.getAllSemesters()
+    fun getAllSemesters() = appDatabase.getSemesterDao().getAllSemesters()
 
-    fun getSubjectsById(id: Int) = subjectDao.getAllSubjectsByClassId(id)
+    fun getSubjectsById(id: Int) = appDatabase.subjectDao().getAllSubjectsByClassId(id)
 
-    suspend fun updateWishlist(id: Int): Boolean {
-        val isWislisted = appDatabase.fileDataDao().getWishlist(id).isWishlisted ?: false
-        appDatabase.fileDataDao().setWishlist(!isWislisted, id)
-        return !isWislisted
+    suspend fun updateWishlist(id: Int, fileName: String, fileUrl: String): Boolean {
+        val isWislisted = appDatabase.filesDao().getWishlist(id)
+        return if (isWislisted == null) {
+            appDatabase.filesDao().insert(
+                FileDownloadModel(
+                    id,
+                    fileUrl,
+                    fileName,
+                    null,
+                    isWishlisted = true
+                )
+            )
+            true
+        } else {
+            appDatabase.filesDao().setWishlist(!isWislisted.isWishlisted, id)
+            !isWislisted.isWishlisted
+        }
     }
 
     //paging 3
@@ -69,8 +76,8 @@ class DashboardRepository(
         ).flow
     }
 
-    fun getDownloadList() = appDatabase.fileDataDao().getDownloaded()
+    fun getDownloadList() = appDatabase.filesDao().getDownloaded()
 
-    fun getWishlisted() = appDatabase.fileDataDao().getAllWishlisted()
+    fun getWishlisted() = appDatabase.filesDao().getAllWishlisted()
 
 }

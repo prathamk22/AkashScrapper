@@ -51,7 +51,8 @@ class FilesPanel : Fragment() {
                         requireContext(),
                         fileUrl = url,
                         fileName = name,
-                        fileId = fileId
+                        fileId = fileId,
+                        subjectName = toolbar.title.toString()
                     )
                 )
             }
@@ -65,7 +66,7 @@ class FilesPanel : Fragment() {
                 when (type) {
                     1 -> {
                         //Add to wishlist
-                        vm.updateWishlist(fileId).observer(this@FilesPanel) {
+                        vm.updateWishlist(fileId, fileName, fileUrl).observer(this@FilesPanel) {
                             filesRv.showSnackbar(
                                 if (it)
                                     "Added to Wishlist"
@@ -92,7 +93,8 @@ class FilesPanel : Fragment() {
                                     requireContext(),
                                     fileUrl,
                                     fileId,
-                                    fileName
+                                    fileName,
+                                    toolbar.title.toString()
                                 )
                             } else {
                                 //Add to download list
@@ -104,6 +106,7 @@ class FilesPanel : Fragment() {
         }
 
         vm.subjectItem.observer(viewLifecycleOwner) { subject ->
+            toolbar.title = subject.subjectName
             searchJob?.cancel()
             searchJob = lifecycleScope.launch {
                 vm.getFilesByKey(subject.subjectName).collect {

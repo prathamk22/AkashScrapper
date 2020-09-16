@@ -15,4 +15,10 @@ class PdfViewModel(
         }
     }
 
+    fun updateTime(id: Int) {
+        runIO {
+            repo.updateTime(id)
+        }
+    }
+
 }

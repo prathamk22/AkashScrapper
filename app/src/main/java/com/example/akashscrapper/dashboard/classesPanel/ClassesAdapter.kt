@@ -23,7 +23,7 @@ class ClassesAdapter : ListAdapter<Semester, ClassesAdapter.ClassesViewHolder>(S
         holder.clickListener = clickListener
     }
 
-    inner class ClassesViewHolder(
+    class ClassesViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
 

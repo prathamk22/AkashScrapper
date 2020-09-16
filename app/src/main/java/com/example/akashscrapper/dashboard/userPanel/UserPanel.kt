@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import com.example.akashscrapper.R
 import com.example.akashscrapper.dashboard.DashboardViewModel
 import com.example.akashscrapper.utils.observer
@@ -32,14 +31,12 @@ class UserPanel : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         downloadRecyclerView.setRv(
             requireActivity(),
-            downloadAdapter,
-            orientation = RecyclerView.HORIZONTAL
+            downloadAdapter
         )
 
         wishlistRecyclerView.setRv(
             requireActivity(),
-            wishlistAdapter,
-            orientation = RecyclerView.HORIZONTAL
+            wishlistAdapter
         )
 
         vm.getDownloadList().observer(viewLifecycleOwner) {
