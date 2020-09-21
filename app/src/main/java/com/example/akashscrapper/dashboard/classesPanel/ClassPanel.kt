@@ -14,10 +14,11 @@ import com.example.akashscrapper.database.Subject
 import com.example.akashscrapper.utils.observer
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.fragment_class_panel.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 @ExperimentalPagingApi
-//TODO() = Add a seperator for classes in class RV
+@OptIn(ExperimentalCoroutinesApi::class)
 class ClassPanel : Fragment() {
 
     val vm: DashboardViewModel by sharedViewModel()
@@ -27,9 +28,16 @@ class ClassPanel : Fragment() {
     val clickListener = object : ClassesClickListener {
         override fun onClick(id: Int) {
             vm.getSubjectsById(id).observer(viewLifecycleOwner) {
-                vm.subjectItem.postValue(it[0])
-                subjectsAdapter.submitList(it)
+                if (it.isNotEmpty()){
+                    vm.subjectItem.postValue(it[0])
+                    subjectsAdapter.submitList(it)
+                }
             }
+        }
+
+        override fun onLongPress(id: Int) {
+            val addClassBottomSheet = SubjectInformationBottomSheet.newInstance(id)
+            addClassBottomSheet.show(requireFragmentManager(), "")
         }
     }
 
@@ -64,13 +72,26 @@ class ClassPanel : Fragment() {
 
         addFab.setOnClickListener {
             val addClassBottomSheet = AddClassBottomSheet()
-            addClassBottomSheet.showNow(requireFragmentManager(), "")
+            addClassBottomSheet.show(requireFragmentManager(), "")
         }
 
-        vm.getAllSemester().observer(viewLifecycleOwner) {
+        vm.getAllSemester().observer(viewLifecycleOwner) { it ->
             if (it.isNotEmpty()) {
+                var semester = -1
+                val list = ArrayList<SemesterListModel>()
+                it.forEach {
+                    if(semester == -1){
+                        semester = it.semester
+                        list.add(SemesterListModel.Subject(it.semester))
+                    }
+                    if (semester != it.semester){
+                        list.add(SemesterListModel.Subject(it.semester))
+                        semester = it.semester
+                    }
+                    list.add(SemesterListModel.SubjectItem(it))
+                }
                 clickListener.onClick(it[0].id)
-                classAdapter.submitList(it)
+                classAdapter.submitList(list)
             }
         }
     }

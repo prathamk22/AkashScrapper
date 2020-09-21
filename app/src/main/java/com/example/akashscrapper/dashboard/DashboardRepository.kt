@@ -80,4 +80,6 @@ class DashboardRepository(
 
     fun getWishlisted() = appDatabase.filesDao().getAllWishlisted()
 
+    fun getSubjectById(id: Int) = appDatabase.getSemesterDao().getSemesterById(id)
+
 }

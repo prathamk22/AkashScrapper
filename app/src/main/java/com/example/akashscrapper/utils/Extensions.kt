@@ -44,6 +44,9 @@ fun SharedPreferences.save(key: String, value: Any) {
     }
 }
 
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T : Any, K : Any> T.sameAndEqual(n: K): Boolean = ((this.javaClass == n.javaClass) && (this == n))
+
 fun AppCompatActivity.setToolbar(
     toolbar: Toolbar,
     hasUpEnabled: Boolean = true,

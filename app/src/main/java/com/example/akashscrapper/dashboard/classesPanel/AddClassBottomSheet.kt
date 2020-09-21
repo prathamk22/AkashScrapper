@@ -2,6 +2,7 @@ package com.example.akashscrapper.dashboard.classesPanel
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -14,8 +15,10 @@ import com.example.akashscrapper.utils.observer
 import com.example.akashscrapper.utils.setToolbar
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_add_class_bottom_sheet.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AddClassBottomSheet : BottomSheetDialogFragment() {
 
     lateinit var genericBottomSheet: GenericBottomSheet
@@ -86,5 +89,10 @@ class AddClassBottomSheet : BottomSheetDialogFragment() {
 
     }
 
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home){
+            dismiss()
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

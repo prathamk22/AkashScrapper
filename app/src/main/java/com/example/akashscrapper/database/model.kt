@@ -27,7 +27,7 @@ data class FileDownloadModel(
     val fileId: Int,
     val fileUrl: String,
     val fileName: String,
-    val subjectName: String,
+    val subjectName: String?,
     val lastVisited: Long = 0,
     val isDownloaded: Boolean? = null,
     val isWishlisted: Boolean = false,

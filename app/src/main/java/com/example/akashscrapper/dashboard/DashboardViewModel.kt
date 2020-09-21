@@ -69,6 +69,9 @@ class DashboardViewModel(
         }
     }
 
+    //subject detail Model
+    fun getSubjectById(id: Int) = repo.getSubjectById(id)
+
     //Files Panel
     private var currentQueryValue: String? = null
 
