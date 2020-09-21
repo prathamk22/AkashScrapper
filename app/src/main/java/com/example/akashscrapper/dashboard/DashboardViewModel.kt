@@ -6,9 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.akashscrapper.database.FileData
-import com.example.akashscrapper.database.Subject
-import com.example.akashscrapper.network.ResultWrapper
+import com.example.data.networking.ResultWrapper
 import com.example.akashscrapper.utils.BaseViewModel
 import com.example.akashscrapper.utils.runIO
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +32,7 @@ class DashboardViewModel(
     }
 
     //Class Panel
-    val subjectItem = MutableLiveData<Subject>()
+    val subjectItem = MutableLiveData<com.example.data.database.Subject>()
 
     fun getAllSemester() = repo.getAllSemesters()
 
@@ -75,10 +73,10 @@ class DashboardViewModel(
     //Files Panel
     private var currentQueryValue: String? = null
 
-    private var currentSearchResult: Flow<PagingData<FileData>>? = null
+    private var currentSearchResult: Flow<PagingData<com.example.data.database.FileData>>? = null
 
     @ExperimentalPagingApi
-    fun getFilesByKey(key: String): Flow<PagingData<FileData>> {
+    fun getFilesByKey(key: String): Flow<PagingData<com.example.data.database.FileData>> {
         val lastResult = currentSearchResult
         if (key == currentQueryValue && lastResult != null) {
             return lastResult

@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.akashscrapper.R
 import com.example.akashscrapper.dashboard.filesPanel.FileClickListener
-import com.example.akashscrapper.database.FileDownloadModel
+import com.example.data.database.FileDownloadModel
 import kotlinx.android.synthetic.main.users_pannel_list.view.*
 
 class UserBaseAdapter :
-    ListAdapter<FileDownloadModel, UserBaseAdapter.UserBaseViewHolder>(FileDataDC()) {
+    ListAdapter<com.example.data.database.FileDownloadModel, UserBaseAdapter.UserBaseViewHolder>(FileDataDC()) {
 
     var onClick: FileClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = UserBaseViewHolder(
@@ -31,7 +31,7 @@ class UserBaseAdapter :
 
         var onClick: FileClickListener? = null
 
-        fun bind(item: FileDownloadModel?) {
+        fun bind(item: com.example.data.database.FileDownloadModel?) {
             with(itemView) {
                 fileName.text = item?.fileName
                 setOnClickListener {
@@ -45,17 +45,17 @@ class UserBaseAdapter :
         }
     }
 
-    private class FileDataDC : DiffUtil.ItemCallback<FileDownloadModel>() {
+    private class FileDataDC : DiffUtil.ItemCallback<com.example.data.database.FileDownloadModel>() {
         override fun areItemsTheSame(
-            oldItem: FileDownloadModel,
-            newItem: FileDownloadModel
+            oldItem: com.example.data.database.FileDownloadModel,
+            newItem: com.example.data.database.FileDownloadModel
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: FileDownloadModel,
-            newItem: FileDownloadModel
+            oldItem: com.example.data.database.FileDownloadModel,
+            newItem: com.example.data.database.FileDownloadModel
         ): Boolean {
             return oldItem.fileId == newItem.fileId
         }

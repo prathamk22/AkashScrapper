@@ -15,8 +15,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.example.akashscrapper.R
-import com.example.akashscrapper.database.FileDownloadModel
-import com.example.akashscrapper.database.dao.FileDownloadsDao
+import com.example.data.database.FileDownloadModel
+import com.example.data.database.dao.FileDownloadsDao
 import com.example.akashscrapper.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -53,7 +53,7 @@ class DownloadPdfService : Service() {
         return null
     }
 
-    private val fileData: FileDownloadsDao by inject()
+    private val fileData: com.example.data.database.dao.FileDownloadsDao by inject()
     lateinit var receiver: BroadcastReceiver
     lateinit var intentFilter: IntentFilter
 
@@ -75,7 +75,7 @@ class DownloadPdfService : Service() {
             GlobalScope.launch {
                 if (fileData.getWishlist(id) == null) {
                     fileData.insert(
-                        FileDownloadModel(
+                        com.example.data.database.FileDownloadModel(
                             id,
                             url,
                             fileNameWithExt,

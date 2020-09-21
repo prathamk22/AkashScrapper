@@ -1,9 +1,9 @@
 package com.example.akashscrapper.pdfActivity
 
-import com.example.akashscrapper.database.dao.FileDownloadsDao
+import com.example.data.database.dao.FileDownloadsDao
 
 class PdfRepository(
-    private val fileDownloadsDao: FileDownloadsDao
+    private val fileDownloadsDao: com.example.data.database.dao.FileDownloadsDao
 ) {
 
     fun getFileById(id: Int) = fileDownloadsDao.getFile(id)

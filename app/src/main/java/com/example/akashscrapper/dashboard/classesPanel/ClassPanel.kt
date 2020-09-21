@@ -10,8 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.akashscrapper.R
 import com.example.akashscrapper.dashboard.DashboardActivity
 import com.example.akashscrapper.dashboard.DashboardViewModel
-import com.example.akashscrapper.database.Subject
-import com.example.akashscrapper.utils.observer
+import com.example.data.database.Subject
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.fragment_class_panel.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,7 +41,7 @@ class ClassPanel : Fragment() {
     }
 
     val subjectClickListener = object : SubjectClickListener {
-        override fun onSubjectClicked(subject: Subject) {
+        override fun onSubjectClicked(subject: com.example.data.database.Subject) {
             vm.subjectItem.postValue(subject)
             (activity as DashboardActivity).overlapping_panels.openStartPanel()
         }

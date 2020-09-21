@@ -1,25 +1,28 @@
 package com.example.akashscrapper.dashboard.filesPanel
 
 import androidx.paging.PagingSource
-import com.example.akashscrapper.database.AppDatabase
-import com.example.akashscrapper.database.FileData
-import com.example.akashscrapper.network.AkashOnlineLib
-import com.example.akashscrapper.network.ResultWrapper
-import com.example.akashscrapper.network.safeApiCall
+import com.example.data.networking.AkashOnlineLib
+import com.example.data.networking.ResultWrapper
+import com.example.data.networking.safeApiCall
 
 class FilesPagingSource(
     private val key: String,
-    private val appDatabase: AppDatabase
-) : PagingSource<Int, FileData>() {
+    private val appDatabase: com.example.data.database.AppDatabase
+) : PagingSource<Int, com.example.data.database.FileData>() {
 
     companion object {
         private const val NOTESHUB_STARTING_PAGE_INDEX = 1
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FileData> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, com.example.data.database.FileData> {
         val position = params.key ?: NOTESHUB_STARTING_PAGE_INDEX
         return when (val response =
-            safeApiCall { AkashOnlineLib.api.getFilesBySubject(key, position) }) {
+            safeApiCall {
+                AkashOnlineLib.api.getFilesBySubject(
+                    key,
+                    position
+                )
+            }) {
             is ResultWrapper.GenericError -> LoadResult.Error(Throwable(response.error))
             is ResultWrapper.Success -> {
                 with(response.value) {
@@ -27,7 +30,7 @@ class FilesPagingSource(
                         val files = body()
                         val list = files?.documents?.data
                         val fileData = list?.map {
-                            FileData(
+                            com.example.data.database.FileData(
                                 document_id = it.document_id,
                                 created_at = it.created_at,
                                 deleted_at = it.deleted_at,

@@ -7,17 +7,17 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.akashscrapper.R
-import com.example.akashscrapper.database.FileData
+import com.example.data.database.FileData
 import kotlinx.android.synthetic.main.files_item.view.*
 import org.json.JSONObject
 
 class FilesPagedAdapter :
-    PagingDataAdapter<FileData, FilesViewHolder>(object : DiffUtil.ItemCallback<FileData>() {
-        override fun areItemsTheSame(oldItem: FileData, newItem: FileData): Boolean {
+    PagingDataAdapter<com.example.data.database.FileData, FilesViewHolder>(object : DiffUtil.ItemCallback<com.example.data.database.FileData>() {
+        override fun areItemsTheSame(oldItem: com.example.data.database.FileData, newItem: com.example.data.database.FileData): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: FileData, newItem: FileData): Boolean {
+        override fun areContentsTheSame(oldItem: com.example.data.database.FileData, newItem: com.example.data.database.FileData): Boolean {
             return oldItem.document_id == newItem.document_id
         }
 
@@ -39,7 +39,7 @@ class FilesPagedAdapter :
 class FilesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     var onClick: FileClickListener? = null
-    fun bind(item: FileData?) {
+    fun bind(item: com.example.data.database.FileData?) {
         with(itemView) {
             try {
                 val jsonObject = JSONObject(item?.document_contributor ?: "")

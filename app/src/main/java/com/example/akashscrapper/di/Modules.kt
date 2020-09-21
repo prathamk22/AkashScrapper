@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.example.akashscrapper.dashboard.DashboardRepository
 import com.example.akashscrapper.dashboard.DashboardViewModel
-import com.example.akashscrapper.database.AppDatabase
+import com.example.data.database.AppDatabase
 import com.example.akashscrapper.pdfActivity.PdfRepository
 import com.example.akashscrapper.pdfActivity.PdfViewModel
 import com.example.akashscrapper.utils.PreferenceHelper

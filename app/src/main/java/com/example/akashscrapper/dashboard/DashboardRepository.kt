@@ -5,32 +5,41 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.akashscrapper.dashboard.filesPanel.FilesPagingSource
-import com.example.akashscrapper.database.*
-import com.example.akashscrapper.network.AkashOnlineLib
-import com.example.akashscrapper.network.models.Subjects
-import com.example.akashscrapper.network.safeApiCall
+import com.example.data.networking.AkashOnlineLib
+import com.example.data.networking.models.Subjects
+import com.example.data.networking.safeApiCall
 import kotlinx.coroutines.flow.Flow
 
 class DashboardRepository(
-    private val appDatabase: AppDatabase
+    private val appDatabase: com.example.data.database.AppDatabase
 ) {
 
     companion object {
         private const val NETWORK_PAGE_SIZE = 10
     }
 
-    suspend fun getToken() = safeApiCall { AkashOnlineLib.api.getToken() }
+    suspend fun getToken() =
+        safeApiCall { AkashOnlineLib.api.getToken() }
 
-    suspend fun getSubjects() = safeApiCall { AkashOnlineLib.api.getSubjects(1) }
+    suspend fun getSubjects() = safeApiCall {
+        AkashOnlineLib.api.getSubjects(1)
+    }
 
     suspend fun insertSubject(subject: Subjects, id: Int) =
         appDatabase.subjectDao()
-            .insert(Subject(subject.id, id, subject.subjectName, subject.subjectAbbrevation))
+            .insert(
+                com.example.data.database.Subject(
+                    subject.id,
+                    id,
+                    subject.subjectName,
+                    subject.subjectAbbrevation
+                )
+            )
 
     suspend fun insertSemester(branch: Int, branchName: String, semester: Int): Long {
         val semesterValue = appDatabase.getSemesterDao().getSemesterByBranch(branch, semester)
         return semesterValue?.id?.toLong() ?: appDatabase.getSemesterDao().insert(
-            Semester(
+            com.example.data.database.Semester(
                 0,
                 semester,
                 branch,
@@ -47,7 +56,7 @@ class DashboardRepository(
         val isWislisted = appDatabase.filesDao().getWishlist(id)
         return if (isWislisted == null) {
             appDatabase.filesDao().insert(
-                FileDownloadModel(
+                com.example.data.database.FileDownloadModel(
                     id,
                     fileUrl,
                     fileName,
@@ -64,7 +73,7 @@ class DashboardRepository(
 
     //paging 3
     @ExperimentalPagingApi
-    fun getFilesByKey(key: String): Flow<PagingData<FileData>> {
+    fun getFilesByKey(key: String): Flow<PagingData<com.example.data.database.FileData>> {
         return Pager(
             config = PagingConfig(
                 pageSize = NETWORK_PAGE_SIZE,

@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.akashscrapper.R
-import com.example.akashscrapper.database.Subject
+import com.example.data.database.Subject
 import kotlinx.android.synthetic.main.subject_item.view.*
 
-class SubjectsAdapter : ListAdapter<Subject, SubjectsAdapter.SubjectsViewHolder>(SubjectsDC()) {
+class SubjectsAdapter : ListAdapter<com.example.data.database.Subject, SubjectsAdapter.SubjectsViewHolder>(SubjectsDC()) {
 
     var subjectClickListener: SubjectClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SubjectsViewHolder(
@@ -28,7 +28,7 @@ class SubjectsAdapter : ListAdapter<Subject, SubjectsAdapter.SubjectsViewHolder>
     ) : RecyclerView.ViewHolder(itemView) {
         var subjectClickListener: SubjectClickListener? = null
 
-        fun bind(item: Subject) = with(itemView) {
+        fun bind(item: com.example.data.database.Subject) = with(itemView) {
             subjectName.text = item.subjectName
             setOnClickListener {
                 subjectClickListener?.onSubjectClicked(item)
@@ -36,17 +36,17 @@ class SubjectsAdapter : ListAdapter<Subject, SubjectsAdapter.SubjectsViewHolder>
         }
     }
 
-    private class SubjectsDC : DiffUtil.ItemCallback<Subject>() {
+    private class SubjectsDC : DiffUtil.ItemCallback<com.example.data.database.Subject>() {
         override fun areItemsTheSame(
-            oldItem: Subject,
-            newItem: Subject
+            oldItem: com.example.data.database.Subject,
+            newItem: com.example.data.database.Subject
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: Subject,
-            newItem: Subject
+            oldItem: com.example.data.database.Subject,
+            newItem: com.example.data.database.Subject
         ): Boolean {
             return oldItem == newItem
         }
@@ -54,5 +54,5 @@ class SubjectsAdapter : ListAdapter<Subject, SubjectsAdapter.SubjectsViewHolder>
 }
 
 interface SubjectClickListener {
-    fun onSubjectClicked(subject: Subject)
+    fun onSubjectClicked(subject: com.example.data.database.Subject)
 }
