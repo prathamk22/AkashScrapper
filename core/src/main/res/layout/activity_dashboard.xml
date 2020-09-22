@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.discord.panels.OverlappingPanelsLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/overlapping_panels"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.core.dashboard.DashboardActivity">
+
+    <FrameLayout
+        android:id="@+id/classesPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start" />
+
+    <FrameLayout
+        android:id="@+id/filesPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/userPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end" />
+
+</com.discord.panels.OverlappingPanelsLayout>

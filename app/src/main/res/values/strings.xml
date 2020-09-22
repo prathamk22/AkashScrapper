@@ -1,45 +1,5 @@
 <resources>
     <string name="app_name">AkashScrapper</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="welcome">Welcome</string>
-    <string name="sign_in_to_continue">sign in to continue</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="forgot_password">Forgot Password ?</string>
-    <string name="get_started">Get Started</string>
-    <string name="login">Login</string>
-    <string name="signup">SignUp</string>
-    <string name="sign_up_to_continue">sign up to continue</string>
-    <string name="name">Name</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="select_university">Select University</string>
-    <string name="select_course">Select Course</string>
-    <string name="select_semester">Select Semester</string>
-    <string name="select_branch">Select Branch</string>
-    <string name="add_course">Add course</string>
-    <string name="downloads">Downloads</string>
-    <string name="wishlist">Wishlist</string>
-
-    <string-array name="semester">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-    </string-array>
-
-    <string-array name="branch">
-        <item>Computer Science and Engineering</item>
-        <item>Information Technology</item>
-        <item>Electronics &amp; Communication Engineering</item>
-        <item>Mechanical &amp; Automation Engineering</item>
-        <item>Electrical &amp; Electronics Engineering</item>
-        <item>Civil Engineering</item>
-        <item>Mechanical Engineering</item>
-    </string-array>
 
 </resources>
