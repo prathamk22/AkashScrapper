@@ -1,3 +1,5 @@
+<img src="images/iPhone 8 - 3.png" width="150" height="333.5"/> <img src="images/mockup.png" width="187.5" height="333.5"/> <img src="images/iPhone 8 - 2.png" width="150" height="333.5"/> <img src="images/iPhone 8 - 4.png" width="187.5" height="333.5"/> <img src="images/iPhone 8 - 5.png" width="150" height="333.5"/> <img src="images/iPhone 8 - 6.png" width="150" height="333.5"/> <img src="images/iPhone 8 - 7.png" width="187.5" height="333.5"/> 
+
 # AkashScrapper
 
 Noteshub is an notes providing application where you can upload and download the notes. Noteshub is specific to IPU University. AkashScrapper is an application built with Noteshub API. It is much more modular in terms of features and code. This solves some problems which user faces while using Noteshub. You can also call it as <b>Noteshub - Remastered</b>
@@ -13,6 +15,8 @@ Noteshub is an notes providing application where you can upload and download the
  - Can view semester subjects at a time. As previously NotesHub provides us only one semester subjects at a time.
  
  - User can mark as favourite, downloaded pdf's and recently viewed in a seperate section. Helping user to find the pdf easily rather than scrolling though whole list again and again
+
+# State: Developing
 
 # Design Decisions & Dependencies:
 ## Kotlin:
@@ -34,6 +38,7 @@ Room - Database Layer
 
 ## Koin - Dependency Injection:
 Sick and tired of Dagger in Production, and annoyed by it slowing down my build, I turned to a substitute. Koin seemed to be the recommended (and a more established) library for Android, however I chose Koin for it's sheer simplicity. It also made strides in performance in v2.0, which makes it my current choice for DI without code generation.
+also made strides in performance , which makes it my current choice for DI without code generation.
 
 ## Gson + Retrofit - Networking:
 A very simple choice when it comes to using REST APIs.
