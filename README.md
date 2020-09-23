@@ -1,8 +1,10 @@
-<img src="images/iPhone 8 - 3.png" width="150" height="333.5"/> <img src="images/mockup.png" width="187.5" height="333.5"/> <img src="images/iPhone 8 - 2.png" width="150" height="333.5"/> <img src="images/iPhone 8 - 4.png" width="187.5" height="333.5"/> <img src="images/iPhone 8 - 5.png" width="150" height="333.5"/> <img src="images/iPhone 8 - 6.png" width="150" height="333.5"/> <img src="images/iPhone 8 - 7.png" width="187.5" height="333.5"/> 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e9fd3181fc8340379716760dd56a3030)](https://www.codacy.com/manual/prathamkhurana43/AkashScrapper/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=prathamk22/AkashScrapper&amp;utm_campaign=Badge_Grade)
 
 # AkashScrapper
 
 Noteshub is an notes providing application where you can upload and download the notes. Noteshub is specific to IPU University. AkashScrapper is an application built with Noteshub API. It is much more modular in terms of features and code. This solves some problems which user faces while using Noteshub. You can also call it as <b>Noteshub - Remastered</b>
+
+<img src="images/iPhone 8 - 3.png" width="150" height="333.5"/> <img src="images/mockup.png" width="187.5" height="333.5"/> <img src="images/iPhone 8 - 2.png" width="150" height="333.5"/> <img src="images/iPhone 8 - 4.png" width="187.5" height="333.5"/> <img src="images/iPhone 8 - 5.png" width="150" height="333.5"/> <img src="images/iPhone 8 - 6.png" width="150" height="333.5"/> <img src="images/iPhone 8 - 7.png" width="187.5" height="333.5"/> 
 
 ## What problems does this application solves which noteshub was not able to:
 
