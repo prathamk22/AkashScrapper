@@ -31,8 +31,6 @@
             android:name="com.example.core.pdfActivity.DownloadPdfService"
             android:enabled="true"
             android:exported="false" />
-
-
     </application>
 
 </manifest>

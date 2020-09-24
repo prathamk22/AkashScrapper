@@ -19,6 +19,9 @@
     <string name="add_course">Add course</string>
     <string name="downloads">Downloads</string>
     <string name="wishlist">Wishlist</string>
+    <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+    <string name="add_semester_title">Add Semester</string>
 
     <string-array name="semester">
         <item>1</item>

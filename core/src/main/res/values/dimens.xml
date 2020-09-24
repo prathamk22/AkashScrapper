@@ -9,4 +9,5 @@
     <dimen name="large_textsize">34sp</dimen>
     <dimen name="small_text_size">14sp</dimen>
     <dimen name="card_corner">16sp</dimen>
+    <dimen name="button_corner_radius">25dp</dimen>
 </resources>

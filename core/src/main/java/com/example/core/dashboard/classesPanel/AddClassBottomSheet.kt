@@ -1,18 +1,20 @@
 package com.example.core.dashboard.classesPanel
 
+import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.example.core.GenericBottomSheet
 import com.example.core.GenericOnClickListener
 import com.example.core.R
 import com.example.core.dashboard.DashboardViewModel
 import com.example.core.utils.observer
-import com.example.core.utils.setToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_add_class_bottom_sheet.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -31,17 +33,27 @@ class AddClassBottomSheet : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.fragment_add_class_bottom_sheet, container, false)
     }
 
+    override fun getTheme(): Int = R.style.RoundedBottomSheetDialogTheme
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = BottomSheetDialog(requireContext(), theme)
+        dialog.setOnShowListener { dialogView ->
+            val d = dialogView as BottomSheetDialog
+            val bottomSheet =
+                d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout?
+            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).state =
+                BottomSheetBehavior.STATE_EXPANDED
+        }
+        return dialog
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as AppCompatActivity).setToolbar(
-            toolbar,
-            indicator = R.drawable.ic_outline_close_24,
-            title = "Add Classroom"
-        )
         semesterTv.setOnClickListener {
             genericBottomSheet = GenericBottomSheet(object : GenericOnClickListener {
                 override fun onClick(position: Int, value: String) {
                     semesterTv.text = value
+                    semesterTv.setTextColor(Color.BLACK)
                     vm.semester = value.toInt()
                 }
             })
@@ -54,6 +66,7 @@ class AddClassBottomSheet : BottomSheetDialogFragment() {
             genericBottomSheet = GenericBottomSheet(object : GenericOnClickListener {
                 override fun onClick(position: Int, value: String) {
                     branchTv.text = value
+                    branchTv.setTextColor(Color.BLACK)
                     vm.branch = position + 1
                     vm.branchName = value
                 }
@@ -87,12 +100,13 @@ class AddClassBottomSheet : BottomSheetDialogFragment() {
             dismiss()
         }
 
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home){
+        close.setOnClickListener {
             dismiss()
         }
-        return super.onOptionsItemSelected(item)
+
+        cancel.setOnClickListener {
+            dismiss()
+        }
     }
+
 }

@@ -1,76 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context="com.example.core.dashboard.classesPanel.AddClassBottomSheet">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:elevation="0dp">
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_large">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_outline_close_24" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            app:contentInsetStartWithNavigation="0dp" />
+            style="@style/NormalTextView"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/margin_large"
+            android:text="@string/add_semester_title" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_large"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginEnd="@dimen/margin_large"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:background="@color/white"
         android:orientation="vertical">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/semesterTv"
+            style="@style/SelectionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_large"
-            app:cardBackgroundColor="@color/white">
+            android:text="@string/select_semester" />
 
-            <TextView
-                android:id="@+id/semesterTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:padding="@dimen/small_margin"
-                android:text="@string/select_semester"
-                android:textColor="@color/black"
-                android:textSize="@dimen/textsize_normal" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/branchTv"
+            style="@style/SelectionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_large"
-            app:cardBackgroundColor="@color/white">
+            android:text="@string/select_branch" />
 
-            <TextView
-                android:id="@+id/branchTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:padding="@dimen/small_margin"
-                android:text="@string/select_branch"
-                android:textColor="@color/black"
-                android:textSize="@dimen/textsize_normal" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/insertCourse"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_course"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="@dimen/textsize_normal"
-            app:rippleColor="@color/blueish" />
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center"
+                android:text="@string/cancel"
+                android:textColor="@color/dark"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/insertCourse"
+                style="@style/ButtonStyleChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@drawable/main_button_background"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:text="@string/done"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
