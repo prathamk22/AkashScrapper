@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/fab_size"
     android:layout_height="56dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginStart="@dimen/small_margin"
     android:layout_marginTop="@dimen/small_margin"
     android:layout_marginEnd="@dimen/small_margin"
-    android:background="@drawable/fab_white">
+    android:background="@drawable/gradient_fab">
 
     <TextView
         android:id="@+id/classInitials"
@@ -16,10 +17,12 @@
         android:gravity="center"
         android:maxLines="1"
         android:textColor="@color/white"
-        android:textSize="@dimen/smallest_text_size"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="21sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="IT" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

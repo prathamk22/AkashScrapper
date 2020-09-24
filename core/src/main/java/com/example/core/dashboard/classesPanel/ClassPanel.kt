@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.core.R
 import com.example.core.dashboard.DashboardActivity
 import com.example.core.dashboard.DashboardViewModel
+import com.example.core.utils.getPrefs
 import com.example.core.utils.observer
-import com.example.data.database.Subject
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.fragment_class_panel.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,8 +29,10 @@ class ClassPanel : Fragment() {
     val clickListener = object :
         ClassesClickListener {
         override fun onClick(id: Int) {
+            getPrefs()?.SP_SELECTED_COURSE = id
+            classAdapter.notifyDataSetChanged()
             vm.getSubjectsById(id).observer(viewLifecycleOwner) {
-                if (it.isNotEmpty()){
+                if (it.isNotEmpty()) {
                     vm.subjectItem.postValue(it[0])
                     subjectsAdapter.submitList(it)
                 }
@@ -109,7 +111,7 @@ class ClassPanel : Fragment() {
                         )
                     )
                 }
-                clickListener.onClick(it[0].id)
+                clickListener.onClick(getPrefs()?.SP_SELECTED_COURSE ?: 0)
                 classAdapter.submitList(list)
             }
         }

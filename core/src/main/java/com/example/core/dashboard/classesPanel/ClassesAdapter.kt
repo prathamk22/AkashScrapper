@@ -3,10 +3,12 @@ package com.example.core.dashboard.classesPanel
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.core.R
+import com.example.core.utils.PreferenceHelper.Companion.getPrefs
 import com.example.core.utils.sameAndEqual
 import kotlinx.android.synthetic.main.class_divider_item.view.*
 import kotlinx.android.synthetic.main.classes_item.view.*
@@ -46,13 +48,17 @@ class ClassesAdapter :
         var clickListener: ClassesClickListener? = null
         fun bind(item: SemesterListModel) = with(itemView) {
             when(item){
-                is SemesterListModel.SubjectItem ->{
-                    with(item.item){
+                is SemesterListModel.SubjectItem -> {
+                    with(item.item) {
                         var initals = ""
                         for (text in branchName.split(" "))
                             if (text.isNotEmpty())
                                 initals += text[0]
                         classInitials.text = initals
+                        background = ContextCompat.getDrawable(
+                            context,
+                            if (getPrefs(context).SP_SELECTED_COURSE == id) R.drawable.gradient_fab else R.drawable.black_white_grad_fab
+                        )
                         setOnClickListener {
                             clickListener?.onClick(id)
                         }

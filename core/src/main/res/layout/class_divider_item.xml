@@ -11,9 +11,10 @@
         android:ellipsize="end"
         android:fontFamily="@font/poppins_medium"
         android:maxLines="1"
+        android:gravity="center"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="@dimen/textsize_normal"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
