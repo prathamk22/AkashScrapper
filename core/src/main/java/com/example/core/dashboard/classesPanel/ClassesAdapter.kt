@@ -60,7 +60,7 @@ class ClassesAdapter :
                             if (getPrefs(context).SP_SELECTED_COURSE == id) R.drawable.gradient_fab else R.drawable.black_white_grad_fab
                         )
                         setOnClickListener {
-                            clickListener?.onClick(id)
+                            clickListener?.onClick(id, branchName)
                         }
                         setOnLongClickListener {
                             clickListener?.onLongPress(id)
@@ -93,6 +93,6 @@ class ClassesAdapter :
 }
 
 interface ClassesClickListener {
-    fun onClick(id: Int)
+    fun onClick(id: Int, name: String)
     fun onLongPress(id: Int)
 }

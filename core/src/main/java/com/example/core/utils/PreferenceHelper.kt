@@ -11,6 +11,7 @@ class PreferenceHelper private constructor() {
         const val REFRESH_TOKEN = "refresh_token"
         const val NAME = "name"
         const val SELECTED_COURSE = "selected_course"
+        const val SELECTED_SUBJECT = "selected_subject"
 
         private var prefs: SharedPreferences? = null
         private var instance: PreferenceHelper = PreferenceHelper()
@@ -39,6 +40,12 @@ class PreferenceHelper private constructor() {
         get() = prefs?.getInt(SELECTED_COURSE, 0) ?: 0
         set(value) {
             prefs?.save(SELECTED_COURSE, value)
+        }
+
+    var SP_SELECTED_SUBJECT: Int
+        get() = prefs?.getInt(SELECTED_SUBJECT, 0) ?: 0
+        set(value) {
+            prefs?.save(SELECTED_SUBJECT, value)
         }
 
 

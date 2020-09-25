@@ -3,10 +3,12 @@ package com.example.core.dashboard.classesPanel
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.core.R
+import com.example.core.utils.PreferenceHelper.Companion.getPrefs
 import com.example.data.database.Subject
 import kotlinx.android.synthetic.main.subject_item.view.*
 
@@ -33,6 +35,22 @@ class SubjectsAdapter : ListAdapter<Subject, SubjectsAdapter.SubjectsViewHolder>
 
         fun bind(item: Subject) = with(itemView) {
             subjectName.text = item.subjectName
+            background = ContextCompat.getDrawable(
+                context,
+                if (item.id == getPrefs(context).SP_SELECTED_SUBJECT)
+                    R.drawable.subjects_gradient_background_colored
+                else
+                    R.drawable.light_grey_background_rounded
+            )
+            subjectName.setTextColor(
+                ContextCompat.getColor(
+                    context,
+                    if (item.id == getPrefs(context).SP_SELECTED_SUBJECT)
+                        R.color.white
+                    else
+                        R.color.black
+                )
+            )
             setOnClickListener {
                 subjectClickListener?.onSubjectClicked(item)
             }

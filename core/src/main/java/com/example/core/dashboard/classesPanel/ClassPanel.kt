@@ -23,17 +23,25 @@ class ClassPanel : Fragment() {
 
     val vm: DashboardViewModel by sharedViewModel()
     val classAdapter = ClassesAdapter()
-    val subjectsAdapter =
-        SubjectsAdapter()
+    val subjectsAdapter = SubjectsAdapter()
 
     val clickListener = object :
         ClassesClickListener {
-        override fun onClick(id: Int) {
+        override fun onClick(id: Int, name: String) {
             getPrefs()?.SP_SELECTED_COURSE = id
             classAdapter.notifyDataSetChanged()
+            subjectName.text = name
             vm.getSubjectsById(id).observer(viewLifecycleOwner) {
+                var notified = false
                 if (it.isNotEmpty()) {
-                    vm.subjectItem.postValue(it[0])
+                    it.forEach {
+                        if (it.id == getPrefs()?.SP_SELECTED_SUBJECT) {
+                            notified = true
+                            vm.subjectItem.postValue(it)
+                        }
+                    }
+                    if (!notified)
+                        vm.subjectItem.postValue(it[0])
                     subjectsAdapter.submitList(it)
                 }
             }
@@ -51,8 +59,10 @@ class ClassPanel : Fragment() {
     val subjectClickListener = object :
         SubjectClickListener {
         override fun onSubjectClicked(subject: com.example.data.database.Subject) {
+            getPrefs()?.SP_SELECTED_SUBJECT = subject.id
+            subjectsAdapter.notifyDataSetChanged()
             vm.subjectItem.postValue(subject)
-            (activity as DashboardActivity).overlapping_panels.openStartPanel()
+            (activity as DashboardActivity).overlapping_panels.closePanels()
         }
     }
 
@@ -88,8 +98,12 @@ class ClassPanel : Fragment() {
             if (it.isNotEmpty()) {
                 var semester = -1
                 val list = ArrayList<SemesterListModel>()
+                var name = ""
                 it.forEach {
-                    if(semester == -1){
+                    if (it.id == getPrefs()?.SP_SELECTED_COURSE) {
+                        name = it.branchName
+                    }
+                    if (semester == -1) {
                         semester = it.semester
                         list.add(
                             SemesterListModel.Subject(
@@ -97,7 +111,7 @@ class ClassPanel : Fragment() {
                             )
                         )
                     }
-                    if (semester != it.semester){
+                    if (semester != it.semester) {
                         list.add(
                             SemesterListModel.Subject(
                                 it.semester
@@ -111,7 +125,7 @@ class ClassPanel : Fragment() {
                         )
                     )
                 }
-                clickListener.onClick(getPrefs()?.SP_SELECTED_COURSE ?: 0)
+                clickListener.onClick(getPrefs()?.SP_SELECTED_COURSE ?: 0, name)
                 classAdapter.submitList(list)
             }
         }

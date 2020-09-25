@@ -14,4 +14,6 @@
     <color name="end_gradient">#C93566</color>
     <color name="white_transparency">#b9ffffff</color>
     <color name="greyText">#A3A3A3</color>
+    <color name="blue_start_gradient">#0575E6</color>
+    <color name="blue_end_gradient">#021B79</color>
 </resources>
