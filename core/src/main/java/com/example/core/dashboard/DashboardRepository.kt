@@ -4,7 +4,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.core.dashboard.filesPanel.FilesPagingSource
+import com.example.core.dashboard.filesPanel.FilesRemoteMediator
 import com.example.data.networking.AkashOnlineLib
 import com.example.data.networking.models.Subjects
 import com.example.data.networking.safeApiCall
@@ -73,20 +73,40 @@ class DashboardRepository(
 
     //paging 3
     @ExperimentalPagingApi
-    fun getFilesByKey(key: String): Flow<PagingData<com.example.data.database.FileData>> {
+    fun getFilesByKey(
+        key: String,
+        subjectId: Int
+    ): Flow<PagingData<com.example.data.database.FileData>> {
         return Pager(
             config = PagingConfig(
                 pageSize = NETWORK_PAGE_SIZE,
                 enablePlaceholders = true
             ),
-            pagingSourceFactory = {
-                FilesPagingSource(
-                    key,
-                    appDatabase
-                )
-            }
+            remoteMediator = FilesRemoteMediator(
+                key,
+                appDatabase
+            ),
+            pagingSourceFactory = { appDatabase.fileDataDao().getFiles(subjectId) }
         ).flow
     }
+
+//    //paging 3
+//    @ExperimentalPagingApi
+//    fun getFilesByKey(key: String): Flow<PagingData<com.example.data.database.FileData>> {
+//        return Pager(
+//            config = PagingConfig(
+//                pageSize = NETWORK_PAGE_SIZE,
+//                enablePlaceholders = true
+//            ),
+//
+//            pagingSourceFactory = {
+//                FilesPagingSource(
+//                    key,
+//                    appDatabase
+//                )
+//            }
+//        ).flow
+//    }
 
     fun getDownloadList() = appDatabase.filesDao().getDownloaded()
 

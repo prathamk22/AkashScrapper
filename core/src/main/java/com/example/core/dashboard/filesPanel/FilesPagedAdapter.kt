@@ -50,8 +50,8 @@ class FilesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             }
             fileName.text = item?.document_title
             val float = item?.document_size?.div(1024 * 1024)
-            fileSize.text = "$float MB"
-            fileViews.text = "${item?.document_view_count} Views"
+//            fileSize.text = "$float MB"
+//            fileViews.text = "${item?.document_view_count} Views"
 
             setOnClickListener {
                 item?.document_absolute_path?.let { url ->

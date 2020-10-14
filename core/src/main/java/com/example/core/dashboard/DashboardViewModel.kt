@@ -76,13 +76,16 @@ class DashboardViewModel(
     private var currentSearchResult: Flow<PagingData<com.example.data.database.FileData>>? = null
 
     @ExperimentalPagingApi
-    fun getFilesByKey(key: String): Flow<PagingData<com.example.data.database.FileData>> {
+    fun getFilesByKey(
+        key: String,
+        subjectId: Int
+    ): Flow<PagingData<com.example.data.database.FileData>> {
         val lastResult = currentSearchResult
         if (key == currentQueryValue && lastResult != null) {
             return lastResult
         }
         currentQueryValue = key
-        val newResult = repo.getFilesByKey(key)
+        val newResult = repo.getFilesByKey(key, subjectId)
             .cachedIn(viewModelScope)
         currentSearchResult = newResult
         return newResult

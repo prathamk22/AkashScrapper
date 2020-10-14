@@ -55,3 +55,11 @@ data class FileData(
     val updated_at: String,
     val uploaded_by_user_id: String?
 )
+
+@Entity
+data class RemoteKeys(
+    @PrimaryKey
+    val fileId: Int,
+    val prevKey: Int?,
+    val nextKey: Int?
+)

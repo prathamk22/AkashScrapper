@@ -2,15 +2,12 @@ package com.example.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.data.database.dao.FileDataDao
-import com.example.data.database.dao.FileDownloadsDao
-import com.example.data.database.dao.SemesterDao
-import com.example.data.database.dao.SubjectDao
+import com.example.data.database.dao.*
 
 @Database(
-    entities = [Semester::class, Subject::class, FileDownloadModel::class, FileData::class],
+    entities = [Semester::class, Subject::class, FileDownloadModel::class, FileData::class, RemoteKeys::class],
     exportSchema = true,
-    version = 2
+    version = 3
 )
 abstract class AppDatabase : RoomDatabase() {
 
@@ -21,4 +18,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun filesDao(): FileDownloadsDao
 
     abstract fun fileDataDao(): FileDataDao
+
+    abstract fun remoteKeys(): RemoteKeysDao
 }

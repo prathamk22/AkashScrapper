@@ -10,8 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.core.dashboard.DashboardViewModel
 import com.example.core.R
+import com.example.core.dashboard.DashboardViewModel
 import com.example.core.pdfActivity.DownloadPdfService
 import com.example.core.pdfActivity.PdfActivity
 import com.example.core.utils.*
@@ -110,7 +110,7 @@ class FilesPanel : Fragment() {
             toolbar.title = subject.subjectName
             searchJob?.cancel()
             searchJob = lifecycleScope.launch {
-                vm.getFilesByKey(subject.subjectName).collect {
+                vm.getFilesByKey(subject.subjectName, subjectId = subject.id).collect {
                     filesAdapter.submitData(it)
                 }
             }

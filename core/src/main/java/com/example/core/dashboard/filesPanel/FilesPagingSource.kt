@@ -61,7 +61,7 @@ class FilesPagingSource(
                             nextKey = if (files?.documents?.data?.isEmpty() == true) null else position + 1
                         )
                     } else {
-                        LoadResult.Error<Int, FileData>(Throwable(response.value.message()))
+                        LoadResult.Error(Throwable(response.value.message()))
                     }
                 }
             }

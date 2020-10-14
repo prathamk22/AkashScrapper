@@ -2,8 +2,8 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="200dp"
+    android:layout_height="250dp"
     android:layout_margin="@dimen/small_margin"
     app:cardCornerRadius="30dp"
     app:cardElevation="4dp">
@@ -37,67 +37,34 @@
                 android:fontFamily="@font/poppins_bold"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="@dimen/large_textsize"
+                android:textSize="24sp"
                 tools:text="vp mishra sem" />
 
             <TextView
                 android:id="@+id/ownerName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="@dimen/textsize_normal"
+                android:textColor="@color/greyText"
+                android:textSize="@dimen/small_text_size"
                 android:textStyle="bold"
                 tools:text="RP AGIDTM" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/fileType"
+                style="@style/ThinChip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/fileType"
-                    style="@style/ThinChip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/small_margin"
-                    android:text="Practical"
-                    android:textColor="@color/black"
-                    app:chipBackgroundColor="#00ffffff"
-                    app:chipStrokeColor="@color/grey"
-                    app:chipStrokeWidth="1dp" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/fileSize"
-                    style="@style/ThinChip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/small_margin"
-                    android:text="Practical"
-                    android:textColor="@color/black"
-                    app:chipBackgroundColor="#00ffffff"
-                    app:chipStrokeColor="@color/grey"
-                    app:chipStrokeWidth="1dp" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/fileViews"
-                    style="@style/ThinChip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Practical"
-                    android:textColor="@color/black"
-                    app:chipBackgroundColor="#00ffffff"
-                    app:chipStrokeColor="@color/grey"
-                    app:chipStrokeWidth="1dp" />
-
-            </LinearLayout>
+                android:layout_marginEnd="@dimen/small_margin"
+                android:text="Practical"
+                android:textColor="@color/white"
+                app:chipBackgroundColor="@color/purple"
+                app:chipStrokeWidth="1dp" />
 
             <TextView
                 android:id="@+id/downloadCloud"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="@dimen/small_margin"
-                android:background="@drawable/download_background"
                 android:fontFamily="@font/poppins_bold"
                 android:gravity="center"
                 android:text="Download"

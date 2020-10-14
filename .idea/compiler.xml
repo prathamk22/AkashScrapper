@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.7">
+      <module name="AkashScrapper.app" target="1.8" />
+      <module name="AkashScrapper.core" target="1.8" />
+      <module name="AkashScrapper.data" target="1.8" />
       <module name="buildc" target="1.7" />
       <module name="commonBuild" target="1.7" />
     </bytecodeTargetLevel>

@@ -63,7 +63,7 @@ class AkashAPI internal constructor(
 
     private val retrofit = Retrofit.Builder()
         .client(clientInterceptor)
-        .baseUrl("http://$PROD/")
+        .baseUrl("https://$PROD/")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
     val api: AkashAPICalls = retrofit.create(

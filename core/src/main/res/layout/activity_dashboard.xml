@@ -4,6 +4,7 @@
     android:id="@+id/overlapping_panels"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lightGrey"
     tools:context="com.example.core.dashboard.DashboardActivity">
 
     <FrameLayout
