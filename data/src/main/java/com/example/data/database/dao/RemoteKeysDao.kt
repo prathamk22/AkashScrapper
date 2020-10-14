@@ -10,10 +10,10 @@ interface RemoteKeysDao : BaseDao<RemoteKeys> {
     @Query("SELECT * FROM RemoteKeys WHERE fileId = :fileId")
     suspend fun remoteKeysRepoId(fileId: Int): RemoteKeys?
 
-    @Query("SELECT * FROM RemoteKeys ORDER BY nextKey DESC")
-    suspend fun getRedditKeys(): List<RemoteKeys>
+    @Query("SELECT * FROM RemoteKeys WHERE subjectKey = :key ORDER BY nextKey DESC")
+    suspend fun getRedditKeys(key: String): List<RemoteKeys>
 
-    @Query("DELETE FROM RemoteKeys")
-    suspend fun nukeTable()
+    @Query("DELETE FROM RemoteKeys WHERE subjectKey = :key")
+    suspend fun nukeTable(key: String)
 
 }

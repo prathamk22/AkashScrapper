@@ -4,6 +4,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
+import androidx.room.withTransaction
 import com.example.data.database.AppDatabase
 import com.example.data.database.FileData
 import com.example.data.database.RemoteKeys
@@ -67,16 +68,13 @@ class FilesRemoteMediator(
                                 ratings_count = it.ratings_count,
                                 subject_id = it.subject_id,
                                 updated_at = it.updated_at,
-                                uploaded_by_user_id = it.uploaded_by_user_id
+                                uploaded_by_user_id = it.uploaded_by_user_id,
+                                subjectKey = key
                             )
                         }
 
                         val endOfPaginationReached = list?.isEmpty() ?: true
 
-                        if (loadType == LoadType.REFRESH) {
-                            appDatabase.remoteKeys().nukeTable()
-                            appDatabase.fileDataDao().clearTable()
-                        }
                         val prevKey =
                             if (page == NOTESHUB_STARTING_PAGE_INDEX) NOTESHUB_STARTING_PAGE_INDEX else page.minus(
                                 1
@@ -86,14 +84,22 @@ class FilesRemoteMediator(
                             RemoteKeys(
                                 fileId = it.document_id,
                                 prevKey = prevKey,
-                                nextKey = nextKey
+                                nextKey = nextKey,
+                                subjectKey = key
                             )
                         }
-                        keys?.let { appDatabase.remoteKeys().insertAll(it) }
-                        fileData?.let { appDatabase.fileDataDao().insertAll(it) }
-//                        appDatabase.withTransaction {
-//                            // clear all tables in the database
-//                        }
+
+                        appDatabase.withTransaction {
+                            if (loadType == LoadType.REFRESH) {
+                                appDatabase.remoteKeys().nukeTable(key)
+                                appDatabase.fileDataDao().clearTable(key)
+                            }
+
+                            keys?.let { appDatabase.remoteKeys().insertAll(it) }
+                            fileData?.let {
+                                appDatabase.fileDataDao().insertAll(it)
+                            }
+                        }
 
                         return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
                     } else {
@@ -106,39 +112,7 @@ class FilesRemoteMediator(
     }
 
     private suspend fun getRemoteKeys(): RemoteKeys? {
-        return appDatabase.remoteKeys().getRedditKeys().firstOrNull()
+        return appDatabase.remoteKeys().getRedditKeys(key).firstOrNull()
     }
 
-
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, FileData>): RemoteKeys? {
-        // Get the last page that was retrieved, that contained items.
-        // From that last page, get the last item
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
-            ?.let { repo ->
-                // Get the remote keys of the last item retrieved
-                appDatabase.remoteKeys().remoteKeysRepoId(repo.document_id)
-            }
-    }
-
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, FileData>): RemoteKeys? {
-        // Get the first page that was retrieved, that contained items.
-        // From that first page, get the first item
-        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
-            ?.let { repo ->
-                // Get the remote keys of the first items retrieved
-                appDatabase.remoteKeys().remoteKeysRepoId(repo.document_id)
-            }
-    }
-
-    private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, FileData>
-    ): RemoteKeys? {
-        // The paging library is trying to load data after the anchor position
-        // Get the item closest to the anchor position
-        return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.document_id?.let { repoId ->
-                appDatabase.remoteKeys().remoteKeysRepoId(repoId)
-            }
-        }
-    }
 }

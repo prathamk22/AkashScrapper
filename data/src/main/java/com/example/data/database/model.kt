@@ -33,6 +33,11 @@ data class FileDownloadModel(
     val isWishlisted: Boolean = false,
 )
 
+//category ids
+// 1 -> Notes
+// 2 -> Question Paper
+// 3 -> Practical Files
+// 4 -> Ebooks
 @Entity
 data class FileData(
     @PrimaryKey
@@ -53,6 +58,7 @@ data class FileData(
     val ratings_count: String,
     val subject_id: Int,
     val updated_at: String,
+    val subjectKey: String,
     val uploaded_by_user_id: String?
 )
 
@@ -60,6 +66,7 @@ data class FileData(
 data class RemoteKeys(
     @PrimaryKey
     val fileId: Int,
+    val subjectKey: String,
     val prevKey: Int?,
     val nextKey: Int?
 )

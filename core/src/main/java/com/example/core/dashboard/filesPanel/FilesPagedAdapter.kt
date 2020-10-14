@@ -44,14 +44,19 @@ class FilesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             try {
                 val jsonObject = JSONObject(item?.document_contributor ?: "")
                 val name = jsonObject.getString("name")
-                ownerName.text = "By $name"
+                ownerName.text = name
             } catch (e: Exception) {
-                ownerName.text = "By ${item?.document_contributor}"
+                ownerName.text = "${item?.document_contributor}"
             }
             fileName.text = item?.document_title
-            val float = item?.document_size?.div(1024 * 1024)
-//            fileSize.text = "$float MB"
-//            fileViews.text = "${item?.document_view_count} Views"
+
+            fileType.text = when (item?.document_category_id) {
+                1 -> "Notes"
+                2 -> "Question Paper"
+                3 -> "Practical Files"
+                4 -> "Ebooks"
+                else -> "Study Material"
+            }
 
             setOnClickListener {
                 item?.document_absolute_path?.let { url ->

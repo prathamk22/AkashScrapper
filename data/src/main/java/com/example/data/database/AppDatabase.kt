@@ -7,7 +7,7 @@ import com.example.data.database.dao.*
 @Database(
     entities = [Semester::class, Subject::class, FileDownloadModel::class, FileData::class, RemoteKeys::class],
     exportSchema = true,
-    version = 3
+    version = 4
 )
 abstract class AppDatabase : RoomDatabase() {
 

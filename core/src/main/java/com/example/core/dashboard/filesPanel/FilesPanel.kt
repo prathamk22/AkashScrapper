@@ -9,18 +9,20 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.core.R
 import com.example.core.dashboard.DashboardViewModel
 import com.example.core.pdfActivity.DownloadPdfService
 import com.example.core.pdfActivity.PdfActivity
 import com.example.core.utils.*
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_files_panel.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import kotlin.math.absoluteValue
 
 @ExperimentalCoroutinesApi
 @ExperimentalPagingApi
@@ -41,7 +43,7 @@ class FilesPanel : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         filesRv.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = filesAdapter
         }
         filesAdapter.onClick = object :
@@ -105,6 +107,12 @@ class FilesPanel : Fragment() {
                 }
             }
         }
+
+        appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val flag =
+                (verticalOffset.toDouble() / appBarLayout.totalScrollRange.toDouble()).absoluteValue
+            searchHolder.alpha = 1 - flag.toFloat()
+        })
 
         vm.subjectItem.observer(viewLifecycleOwner) { subject ->
             toolbar.title = subject.subjectName

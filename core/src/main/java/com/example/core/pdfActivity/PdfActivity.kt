@@ -78,7 +78,8 @@ class PdfActivity : AppCompatActivity() {
                             parentView.showSnackbar(
                                 "Error reading File. Download again?",
                                 length = Snackbar.LENGTH_INDEFINITE,
-                                actionText = "Download"
+                                actionText = "Download",
+                                action = true
                             ) {
                                 file.delete()
                                 vm.deleteFile(fileId)
@@ -88,13 +89,14 @@ class PdfActivity : AppCompatActivity() {
                         parentView.showSnackbar(
                             "Error reading File. Download again?",
                             length = Snackbar.LENGTH_INDEFINITE,
-                            actionText = "Download"
+                            actionText = "Download",
+                            action = true
                         ) {
                             file.delete()
                             vm.deleteFile(fileId)
                         }
                     }
-                } else if (it.isDownloaded == null) {
+                } else if (it.isDownloaded == false) {
                     if (!applicationContext.isMyServiceRunning(DownloadPdfService::class.java)) {
                         downloadFileAndShow()
                     } else {
@@ -106,6 +108,7 @@ class PdfActivity : AppCompatActivity() {
                 if (!applicationContext.isMyServiceRunning(DownloadPdfService::class.java)) {
                     downloadFileAndShow()
                 } else {
+
                     //Add to download list and queue it
                     //make DownloadPdfService compatible to download multiple files through one service
                 }

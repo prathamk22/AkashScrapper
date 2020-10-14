@@ -12,8 +12,8 @@ interface FileDataDao : BaseDao<FileData> {
     @Query("SELECT * FROM FileData WHERE subject_id = :subjectId")
     fun getFiles(subjectId: Int): PagingSource<Int, FileData>
 
-    @Query("DELETE FROM FileData")
-    suspend fun clearTable()
+    @Query("DELETE FROM FileData WHERE subjectKey = :key")
+    suspend fun clearTable(key: String)
 
     @Query("SELECT * FROM FileData WHERE document_id = :id")
     suspend fun getWishlist(id: Int): FileData

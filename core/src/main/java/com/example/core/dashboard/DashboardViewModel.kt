@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.core.utils.BaseViewModel
 import com.example.core.utils.runIO
+import com.example.data.database.FileData
 import com.example.data.networking.ResultWrapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -73,13 +74,13 @@ class DashboardViewModel(
     //Files Panel
     private var currentQueryValue: String? = null
 
-    private var currentSearchResult: Flow<PagingData<com.example.data.database.FileData>>? = null
+    private var currentSearchResult: Flow<PagingData<FileData>>? = null
 
     @ExperimentalPagingApi
     fun getFilesByKey(
         key: String,
         subjectId: Int
-    ): Flow<PagingData<com.example.data.database.FileData>> {
+    ): Flow<PagingData<FileData>> {
         val lastResult = currentSearchResult
         if (key == currentQueryValue && lastResult != null) {
             return lastResult

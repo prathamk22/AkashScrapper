@@ -12,6 +12,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
@@ -20,6 +21,7 @@
             app:layout_scrollFlags="exitUntilCollapsed">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -28,7 +30,6 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:elevation="0dp"
                     app:layout_collapseMode="pin">
 
                     <RelativeLayout
@@ -57,6 +58,7 @@
                 </androidx.appcompat.widget.Toolbar>
 
                 <LinearLayout
+                    android:id="@+id/searchHolder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"

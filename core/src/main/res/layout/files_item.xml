@@ -2,8 +2,8 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="200dp"
-    android:layout_height="250dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_margin="@dimen/small_margin"
     app:cardCornerRadius="30dp"
     app:cardElevation="4dp">
@@ -55,21 +55,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/small_margin"
-                android:text="Practical"
                 android:textColor="@color/white"
                 app:chipBackgroundColor="@color/purple"
+                app:chipStrokeColor="@color/purple"
                 app:chipStrokeWidth="1dp" />
 
-            <TextView
+            <com.google.android.material.chip.Chip
                 android:id="@+id/downloadCloud"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_margin"
-                android:fontFamily="@font/poppins_bold"
+                android:theme="@style/ThinChip"
+                app:chipBackgroundColor="@color/purple"
                 android:gravity="center"
+                app:chipIcon="@drawable/ic_baseline_arrow_downward_24"
                 android:text="Download"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textsize_normal" />
+                app:chipIconEnabled="true"
+                app:chipIconTint="@color/white"
+                app:chipStrokeColor="@color/purple"
+                app:chipStrokeWidth="1dp" />
 
         </LinearLayout>
 

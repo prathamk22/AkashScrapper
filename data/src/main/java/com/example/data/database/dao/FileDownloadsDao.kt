@@ -10,7 +10,7 @@ interface FileDownloadsDao :
     BaseDao<FileDownloadModel> {
 
     @Query("SELECT * FROM FileDownloadModel WHERE fileId = :id")
-    fun getFile(id: Int): LiveData<com.example.data.database.FileDownloadModel>
+    fun getFile(id: Int): LiveData<FileDownloadModel?>
 
     @Query("UPDATE FileDownloadModel SET isDownloaded = :downloaded WHERE fileId = :id")
     suspend fun fileDownloaded(downloaded: Boolean, id: Int)
@@ -19,13 +19,13 @@ interface FileDownloadsDao :
     fun deleteFile(id: Int)
 
     @Query("SELECT * FROM FileDownloadModel WHERE isDownloaded = 1 LIMIT 5")
-    fun getDownloaded(): LiveData<List<com.example.data.database.FileDownloadModel>>
+    fun getDownloaded(): LiveData<List<FileDownloadModel>>
 
     @Query("SELECT * FROM FileDownloadModel WHERE isWishlisted = 1 LIMIT 5")
-    fun getAllWishlisted(): LiveData<List<com.example.data.database.FileDownloadModel>>
+    fun getAllWishlisted(): LiveData<List<FileDownloadModel>>
 
     @Query("SELECT * FROM FileDownloadModel WHERE fileId = :id")
-    suspend fun getWishlist(id: Int): com.example.data.database.FileDownloadModel?
+    suspend fun getWishlist(id: Int): FileDownloadModel?
 
     @Query("UPDATE FileDownloadModel SET isWishlisted = :wishlist WHERE fileId = :id")
     suspend fun setWishlist(wishlist: Boolean, id: Int)
