@@ -7,6 +7,13 @@
         <item name="android:fontFamily">@font/poppins_regular</item>
     </style>
 
+    <style name="Actionbar" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+    </style>
+
     <style name="SplashScreen" parent="AppTheme">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@drawable/background_splash</item>

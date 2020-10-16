@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.observe
+import androidx.viewpager.widget.ViewPager
 import com.example.core.R
 import com.example.core.utils.*
 import com.google.android.material.snackbar.Snackbar
@@ -68,12 +69,7 @@ class PdfActivity : AppCompatActivity() {
                             file.decryptFile(applicationContext, it.fileName.getEncryptedName())
                         this.tempFile = tempFile
                         if (tempFile?.exists() == true) {
-                            pdfViewPager = PDFViewPager(this, tempFile.absolutePath)
-                            parentView.addView(
-                                pdfViewPager,
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.MATCH_PARENT
-                            )
+                            setupPdf()
                         } else {
                             parentView.showSnackbar(
                                 "Error reading File. Download again?",
@@ -87,12 +83,11 @@ class PdfActivity : AppCompatActivity() {
                         }
                     } else {
                         parentView.showSnackbar(
-                            "Error reading File. Download again?",
+                            "File Not available. Download again?",
                             length = Snackbar.LENGTH_INDEFINITE,
                             actionText = "Download",
                             action = true
                         ) {
-                            file.delete()
                             vm.deleteFile(fileId)
                         }
                     }
@@ -116,7 +111,34 @@ class PdfActivity : AppCompatActivity() {
         }
     }
 
-    fun downloadFileAndShow() {
+    private fun setupPdf() {
+        pdfViewPager = PDFViewPager(this, tempFile?.absolutePath)
+        parentView.addView(
+            pdfViewPager,
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        pdfViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+
+            }
+
+            override fun onPageSelected(position: Int) {
+
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+        })
+    }
+
+    private fun downloadFileAndShow() {
         if (!applicationContext.checkPermission()) {
             //TODO() = Handle Storage Permission properly
             ActivityCompat.requestPermissions(

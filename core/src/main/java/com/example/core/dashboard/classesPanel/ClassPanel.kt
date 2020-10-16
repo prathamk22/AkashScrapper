@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -129,5 +130,11 @@ class ClassPanel : Fragment() {
                 classAdapter.submitList(list)
             }
         }
+
+        vm.courseInserted.observer(viewLifecycleOwner) {
+            subjectsShimmerLayout.isVisible = !it
+            classShimmer.isVisible = !it
+        }
+
     }
 }

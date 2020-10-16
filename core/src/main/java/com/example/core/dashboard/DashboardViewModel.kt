@@ -46,6 +46,7 @@ class DashboardViewModel(
     val courseInserted = MutableLiveData<Boolean>()
 
     fun insertCourse() {
+        courseInserted.postValue(false)
         runIO {
             when (val response = repo.getSubjects()) {
                 is ResultWrapper.GenericError -> setError(response.error)
@@ -61,6 +62,7 @@ class DashboardViewModel(
                         }
                         courseInserted.postValue(true)
                     } else {
+                        courseInserted.postValue(true)
                         setError(response.value.message())
                     }
                 }

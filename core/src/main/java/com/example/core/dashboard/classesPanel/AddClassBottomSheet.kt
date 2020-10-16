@@ -12,7 +12,6 @@ import com.example.core.GenericBottomSheet
 import com.example.core.GenericOnClickListener
 import com.example.core.R
 import com.example.core.dashboard.DashboardViewModel
-import com.example.core.utils.observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -94,9 +93,6 @@ class AddClassBottomSheet : BottomSheetDialogFragment() {
                 return@setOnClickListener
             }
             vm.insertCourse()
-        }
-
-        vm.courseInserted.observer(viewLifecycleOwner) {
             dismiss()
         }
 
