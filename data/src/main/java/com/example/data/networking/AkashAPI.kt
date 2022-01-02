@@ -57,9 +57,10 @@ class AkashAPI internal constructor(
         }
         .build()
 
-    var gson: Gson = GsonBuilder()
-        .setLenient()
-        .create()
+    private val gson: Gson
+        get() = GsonBuilder()
+            .setLenient()
+            .create()
 
     private val retrofit = Retrofit.Builder()
         .client(clientInterceptor)

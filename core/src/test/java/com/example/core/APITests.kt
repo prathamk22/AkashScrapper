@@ -27,14 +27,6 @@ class APITests {
         })
     }
 
-    //Call to update the token so that Other calls can execute properly
-    @Test
-    fun `GET ACCESS TOKEN`() {
-        val response = runBlocking { AkashOnlineLib.api.getToken() }
-        assertTrue(response.isSuccessful)
-        assertNotNull(response.body()?.accessToken)
-    }
-
     @Test
     fun `GET COURSE`() {
         val response = runBlocking { AkashOnlineLib.api.getSubjects(1) }
@@ -50,4 +42,3 @@ class APITests {
         assertNotNull(response.body())
     }
 }
-
