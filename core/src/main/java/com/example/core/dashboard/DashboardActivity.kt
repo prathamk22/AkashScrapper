@@ -20,12 +20,11 @@ class DashboardActivity : AppCompatActivity() {
 
     val vm: DashboardViewModel by stateViewModel()
 
-    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        if (getPrefs().SP_JWT_TOKEN_KEY.isNullOrEmpty()) {
+        if (getPrefs().SP_JWT_TOKEN_KEY.isEmpty()) {
             vm.getToken().observer(this) {
                 getPrefs().SP_JWT_TOKEN_KEY = it ?: ""
             }

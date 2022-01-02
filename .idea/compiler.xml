@@ -2,9 +2,9 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.7">
-      <module name="AkashScrapper.app" target="1.8" />
-      <module name="AkashScrapper.core" target="1.8" />
-      <module name="AkashScrapper.data" target="1.8" />
+      <module name="AkashScrapper.app" target="12" />
+      <module name="AkashScrapper.core" target="12" />
+      <module name="AkashScrapper.data" target="12" />
       <module name="buildc" target="1.7" />
       <module name="commonBuild" target="1.7" />
     </bytecodeTargetLevel>

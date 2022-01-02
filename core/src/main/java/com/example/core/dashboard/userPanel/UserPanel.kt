@@ -26,7 +26,6 @@ class UserPanel : Fragment() {
         return inflater.inflate(R.layout.fragment_user_panel, container, false)
     }
 
-    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         downloadRecyclerView.setRv(

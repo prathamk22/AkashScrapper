@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.observe
 import androidx.viewpager.widget.ViewPager
 import com.example.core.R
 import com.example.core.utils.*
@@ -52,9 +51,9 @@ class PdfActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             fileName = "${intent.getStringExtra(FILE_NAME)}.pdf"
-            fileUrl = intent.getStringExtra(FILE_URL)
+            fileUrl = intent.getStringExtra(FILE_URL) ?: ""
             fileId = intent.getIntExtra(FILE_ID, 0)
-            subjectName = intent.getStringExtra(SUBJECT_NAME)
+            subjectName = intent.getStringExtra(SUBJECT_NAME) ?: ""
         }
 
         vm.getFileById(fileId).observe(this) {

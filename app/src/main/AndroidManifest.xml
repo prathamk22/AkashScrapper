@@ -18,6 +18,7 @@
         <activity android:name="com.example.core.dashboard.DashboardActivity" />
         <activity
             android:name=".SplashScreen"
+            android:exported="true"
             android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +30,7 @@
         <activity
             android:name="com.example.core.pdfActivity.PdfActivity"
             android:launchMode="singleTop"
+            android:exported="false"
             android:parentActivityName="com.example.core.dashboard.DashboardActivity"
             android:theme="@style/Actionbar" />
 

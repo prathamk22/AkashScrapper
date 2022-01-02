@@ -75,7 +75,7 @@ class DownloadPdfService : Service() {
                     fileData.insert(
                         com.example.data.database.FileDownloadModel(
                             id,
-                            url,
+                            url ?: "",
                             fileNameWithExt,
                             subjectName,
                             lastVisited = System.currentTimeMillis(),
